@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 2 - Student Grade Manager</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-task="2">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="../index.html" class="site-header__wordmark">Skye8</a>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="../index.html">Dashboard</a></li>
+          <li><a href="index.html" data-task="2" aria-current="page">Task 2</a></li>
+        </ol>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+
+    <div class="page-title">
+      <span class="page-title__eyebrow">Task 2</span>
+      <h1>Student Grade Manager</h1>
+      <p class="page-title__supporting">
+        Grade students and derive class statistics from a dataset.
+      </p>
+    </div>
+
+    <div class="card section">
+      <h2 class="section__heading">Add student</h2>
+      <form id="student-form" novalidate>
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="student-name">Student name</label>
+            <input
+              type="text"
+              id="student-name"
+              class="field"
+              placeholder="e.g. Jane Doe"
+              required
+            >
+            <span id="student-name-error" class="field-error" role="alert"></span>
+          </div>
+          <div class="form-row">
+            <label for="student-score">Score (0 - 100)</label>
+            <input
+              type="text"
+              inputmode="numeric"
+              id="student-score"
+              class="field"
+              placeholder="0 - 100"
+              required
+            >
+            <span id="student-score-error" class="field-error" role="alert"></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn--primary">Add student</button>
+      </form>
+    </div>
+
+    <section class="section" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" class="section__heading">Class statistics</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat__label">Average</span>
+          <span class="stat__value" id="stat-average">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Highest</span>
+          <span class="stat__value" id="stat-highest">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Lowest</span>
+          <span class="stat__value" id="stat-lowest">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Students</span>
+          <span class="stat__value" id="stat-count">0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="list-heading">
+      <h2 id="list-heading" class="section__heading">Student list</h2>
+      <div class="card">
+        <ul id="student-list" class="list" aria-label="Students"></ul>
+        <div id="student-empty" class="empty-state">
+          <div class="empty-state__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="24" cy="16" r="8"/>
+              <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16"/>
+            </svg>
+          </div>
+          <p class="empty-state__headline">No students yet</p>
+          <p class="empty-state__hint">Add a student using the form above to see class statistics.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Skye8 - JavaScript Practical Assessment - SKY8-JSA-001</p>
+    <p>Maintainer: Engr. Lionel A. | <span data-year></span></p>
+  </footer>
+
+  <script src="../assets/js/shell.js" defer></script>
+  <script src="task-2.js" defer></script>
+
+</body>
+</html>
