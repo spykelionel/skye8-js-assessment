@@ -1,0 +1,61 @@
+name: Submission checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Reject dependency manifests
+        run: |
+          if ls package.json package-lock.json yarn.lock pnpm-lock.yaml 2>/dev/null | grep -q .; then
+            echo "A dependency manifest is present. This assessment is vanilla JavaScript only."
+            exit 1
+          fi
+          echo "No dependency manifests found."
+
+      - name: Reject committed node_modules
+        run: |
+          if [ -d node_modules ]; then
+            echo "node_modules is committed. Add it to .gitignore and remove it."
+            exit 1
+          fi
+          echo "No committed node_modules."
+
+      - name: Detect framework usage
+        run: |
+          if grep -rniE 'react|vue\.js|angular|jquery|\bsvelte\b' --include='*.html' --include='*.js' . ; then
+            echo "Possible framework usage detected. A reviewer will check this."
+          fi
+          echo "Scan complete."
+        continue-on-error: true
+
+      - name: JavaScript syntax check
+        run: |
+          fail=0
+          while IFS= read -r f; do
+            node --check "$f" || fail=1
+          done < <(find . -name '*.js' -not -path './.git/*')
+          exit $fail
+
+      - name: Remaining TODO markers
+        run: |
+          count=$(grep -rno 'TODO \[T[0-9]-[0-9][0-9]\]' --include='*.js' . | wc -l)
+          echo "Unimplemented TODO markers remaining: $count"
+          if [ "$count" -gt 0 ]; then
+            echo "::warning::$count TODO markers remain in the submission."
+          fi
+        continue-on-error: true
+
+      - name: Relative path check
+        run: |
+          if grep -rnE '(href|src)="/' --include='*.html' . ; then
+            echo "::warning::Absolute paths found. These break on GitHub Pages project sites."
+          fi
+          echo "Path scan complete."
+        continue-on-error: true
