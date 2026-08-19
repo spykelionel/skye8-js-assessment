@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 4 - Product Search, Filter and Sort</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-task="4">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="../index.html" class="site-header__wordmark">Skye8</a>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="../index.html">Dashboard</a></li>
+          <li><a href="index.html" data-task="4" aria-current="page">Task 4</a></li>
+        </ol>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+
+    <div class="page-title">
+      <span class="page-title__eyebrow">Task 4</span>
+      <h1>Product Search, Filter and Sort</h1>
+      <p class="page-title__supporting">
+        Transform a product dataset through search, filter and sort.
+      </p>
+    </div>
+
+    <section class="section">
+      <div class="toolbar">
+        <input
+          type="search"
+          id="product-search"
+          class="field"
+          placeholder="Search products..."
+          aria-label="Search products by name"
+        >
+        <select id="category-filter" class="field" aria-label="Filter by category">
+          <option value="">All categories</option>
+          <option value="Laptops">Laptops</option>
+          <option value="Phones">Phones</option>
+          <option value="Audio">Audio</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Wearables">Wearables</option>
+          <option value="Displays">Displays</option>
+        </select>
+        <select id="price-filter" class="field" aria-label="Filter by price range">
+          <option value="">All prices</option>
+          <option value="0-50000">Under 50,000 XAF</option>
+          <option value="50000-150000">50,000 - 150,000 XAF</option>
+          <option value="150000-500000">150,000 - 500,000 XAF</option>
+          <option value="500000-">Over 500,000 XAF</option>
+        </select>
+        <select id="sort-select" class="field" aria-label="Sort products">
+          <option value="">Default order</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+        </select>
+      </div>
+
+      <p class="section__heading">
+        Showing <span id="product-count">0</span> products
+      </p>
+
+      <div id="product-grid" class="card-grid"></div>
+
+      <div id="product-empty" class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="20" cy="20" r="14"/>
+            <line x1="30" y1="30" x2="42" y2="42"/>
+          </svg>
+        </div>
+        <p class="empty-state__headline">No products found</p>
+        <p class="empty-state__hint">Try adjusting your search or filter criteria.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Skye8 - JavaScript Practical Assessment - SKY8-JSA-001</p>
+    <p>Maintainer: Engr. Lionel A. | <span data-year></span></p>
+  </footer>
+
+  <script src="../assets/js/shell.js" defer></script>
+  <script src="data.js" defer></script>
+  <script src="task-4.js" defer></script>
+
+</body>
+</html>
