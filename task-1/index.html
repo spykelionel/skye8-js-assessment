@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 1 - Interactive Expense Calculator</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-task="1">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="../index.html" class="site-header__wordmark">Skye8</a>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="../index.html">Dashboard</a></li>
+          <li><a href="index.html" data-task="1" aria-current="page">Task 1</a></li>
+        </ol>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+
+    <div class="page-title">
+      <span class="page-title__eyebrow">Task 1</span>
+      <h1>Interactive Expense Calculator</h1>
+      <p class="page-title__supporting">
+        Capture, list and total expenses with validated input.
+      </p>
+    </div>
+
+    <div class="card section">
+      <h2 class="section__heading">Add expense</h2>
+      <form id="expense-form" novalidate>
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="expense-name">Expense name</label>
+            <input
+              type="text"
+              id="expense-name"
+              class="field"
+              placeholder="e.g. Office supplies"
+              required
+            >
+            <span id="expense-name-error" class="field-error" role="alert"></span>
+          </div>
+          <div class="form-row">
+            <label for="expense-amount">Amount</label>
+            <input
+              type="text"
+              inputmode="decimal"
+              id="expense-amount"
+              class="field"
+              placeholder="0.00"
+              required
+            >
+            <span id="expense-amount-error" class="field-error" role="alert"></span>
+          </div>
+        </div>
+        <button type="submit" class="btn btn--primary">Add expense</button>
+      </form>
+    </div>
+
+    <section class="section" aria-labelledby="summary-heading">
+      <h2 id="summary-heading" class="section__heading">Summary</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat__label">Total expenses</span>
+          <span class="stat__value" id="expense-total">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Number of items</span>
+          <span class="stat__value" id="expense-count">0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="list-heading">
+      <h2 id="list-heading" class="section__heading">Expenses</h2>
+      <div class="card">
+        <ul id="expense-list" class="list" aria-label="Expense items"></ul>
+        <div id="expense-empty" class="empty-state">
+          <div class="empty-state__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="6" y="10" width="36" height="28" rx="4"/>
+              <line x1="14" y1="22" x2="34" y2="22"/>
+              <line x1="14" y1="30" x2="26" y2="30"/>
+            </svg>
+          </div>
+          <p class="empty-state__headline">No expenses yet</p>
+          <p class="empty-state__hint">Add your first expense using the form above.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Skye8 - JavaScript Practical Assessment - SKY8-JSA-001</p>
+    <p>Maintainer: Engr. Lionel A. | <span data-year></span></p>
+  </footer>
+
+  <script src="../assets/js/shell.js" defer></script>
+  <script src="task-1.js" defer></script>
+
+</body>
+</html>
