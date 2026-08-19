@@ -72,9 +72,3 @@ Marked in the code quality band, not as extra tasks.
 - Genuinely useful empty and error states.
 - A clean, readable commit history that tells the story of the build.
 - Honest, specific writing in the challenges section of the pull request.
-
-## Review call
-
-Every submission gets a short live review. You will be asked to open your
-hosted site, walk through your task 5 aggregation logic, and explain one
-decision you made and one thing you would do differently. Prepare for it.

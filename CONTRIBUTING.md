@@ -10,7 +10,7 @@ request write access to this repository, and do not push a branch to it.
 ## 2. Clone and branch
 
 ```bash
-git clone https://github.com/<your-username>/skye8-js-assessment.git
+git clone https://github.com/spykelionel/skye8-js-assessment.git
 cd skye8-js-assessment
 git checkout -b assessment/<your-username>
 ```
@@ -77,7 +77,7 @@ compare: <your-username>/skye8-js-assessment  assessment/<your-username>
 Title it:
 
 ```text
-Assessment submission - <Your Full Name> - <Cohort>
+Assessment submission - <Your Full Name>
 ```
 
 Fill in the pull request template completely. Every section. An incomplete

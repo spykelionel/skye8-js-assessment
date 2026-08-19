@@ -3,7 +3,7 @@
 Starter repository for the Skye8 frontend internship practical assessment.
 
 Maintainer: Engr. Lionel A.
-Assessment ID: SKY8-JSA-001
+Assessment ID: SKY8-JSA-001 (Final JS Assessment)
 
 ---
 
@@ -22,8 +22,7 @@ and adding one is a failure condition rather than a bonus.
 ## 2. What you must not use
 
 React, Vue, Angular, Svelte, jQuery, Alpine, Bootstrap, Tailwind, any CSS
-framework, any bundler, any npm dependency, any AI-generated code you cannot
-explain line by line in the review call.
+framework, any bundler, any npm dependency, any `AI-generated code`.
 
 You may use anything the browser gives you natively.
 
@@ -80,16 +79,10 @@ This is a static site, but `localStorage`, module scoping and relative paths
 behave differently over `file://`. Serve it.
 
 ```bash
-# Python, already installed on most machines
-python3 -m http.server 5173
-
-# or Node, no install needed
-npx --yes serve . -l 5173
-
-# or VS Code: install Live Server, right click index.html, Open with Live Server
+# VS Code: install Live Server, right click index.html, Open with Live Server
 ```
 
-Then open `http://localhost:5173`.
+Then open `http://localhost:5500`. Or whatever `PORT` your app runs on.
 
 ## 7. Task specific instructions
 
