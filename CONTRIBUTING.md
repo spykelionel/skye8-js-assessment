@@ -22,7 +22,7 @@ The branch name matters. It is how submissions are tracked.
 Serve the site locally and implement the tasks.
 
 ```bash
-python3 -m http.server 5173
+ # Vs code live server
 ```
 
 Commit as you go, in meaningful slices. Push regularly so your progress is
