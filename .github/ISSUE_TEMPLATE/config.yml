@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Assessment questions
+    url: https://github.com/spykelionel/skye8-js-assessment/discussions
+    about: Ask about the assessment brief, the rubric or the submission process.
