@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 3 - Persistent To-Do Application</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-task="3">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="../index.html" class="site-header__wordmark">Skye8</a>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="../index.html">Dashboard</a></li>
+          <li><a href="index.html" data-task="3" aria-current="page">Task 3</a></li>
+        </ol>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+
+    <div class="page-title">
+      <span class="page-title__eyebrow">Task 3</span>
+      <h1>Persistent To-Do Application</h1>
+      <p class="page-title__supporting">
+        Full CRUD with filtering that survives a page refresh.
+      </p>
+    </div>
+
+    <div class="card section">
+      <h2 class="section__heading">Add task</h2>
+      <form id="todo-form" novalidate>
+        <div class="form-row">
+          <label for="todo-input">Task description</label>
+          <input
+            type="text"
+            id="todo-input"
+            class="field"
+            placeholder="What needs to be done?"
+            required
+          >
+          <span id="todo-input-error" class="field-error" role="alert"></span>
+        </div>
+        <button type="submit" class="btn btn--primary">Add task</button>
+      </form>
+    </div>
+
+    <section class="section" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" class="section__heading">Overview</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat__label">Total</span>
+          <span class="stat__value" id="stat-total">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Completed</span>
+          <span class="stat__value" id="stat-completed">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Pending</span>
+          <span class="stat__value" id="stat-pending">0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="list-heading">
+      <h2 id="list-heading" class="section__heading">Tasks</h2>
+      <div class="toolbar" role="group" aria-label="Filter tasks">
+        <button id="filter-all" class="chip" aria-pressed="true" type="button">All</button>
+        <button id="filter-pending" class="chip" aria-pressed="false" type="button">Pending</button>
+        <button id="filter-completed" class="chip" aria-pressed="false" type="button">Completed</button>
+      </div>
+      <div class="card">
+        <ul id="todo-list" class="list" aria-label="To-do items"></ul>
+        <div id="todo-empty" class="empty-state">
+          <div class="empty-state__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="8" y="6" width="32" height="36" rx="4"/>
+              <line x1="16" y1="16" x2="32" y2="16"/>
+              <line x1="16" y1="24" x2="28" y2="24"/>
+              <line x1="16" y1="32" x2="24" y2="32"/>
+            </svg>
+          </div>
+          <p class="empty-state__headline">No tasks yet</p>
+          <p class="empty-state__hint">Add a task using the form above to get started.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Skye8 - JavaScript Practical Assessment - SKY8-JSA-001</p>
+    <p>Maintainer: Engr. Lionel A. | <span data-year></span></p>
+  </footer>
+
+  <script src="../assets/js/shell.js" defer></script>
+  <script src="task-3.js" defer></script>
+
+</body>
+</html>
