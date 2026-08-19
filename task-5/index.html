@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task 5 - Interactive Sales Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body data-task="5">
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="../index.html" class="site-header__wordmark">Skye8</a>
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="../index.html">Dashboard</a></li>
+          <li><a href="index.html" data-task="5" aria-current="page">Task 5</a></li>
+        </ol>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+
+    <div class="page-title">
+      <span class="page-title__eyebrow">Task 5</span>
+      <h1>Interactive Sales Dashboard</h1>
+      <p class="page-title__supporting">
+        Derive business metrics from a sales dataset and present them.
+      </p>
+    </div>
+
+    <section class="section" aria-labelledby="kpi-heading">
+      <h2 id="kpi-heading" class="section__heading">Key performance indicators</h2>
+      <div class="stat-grid">
+        <div class="stat">
+          <span class="stat__label">Total revenue</span>
+          <span class="stat__value" id="kpi-revenue">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Orders</span>
+          <span class="stat__value" id="kpi-orders">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Units sold</span>
+          <span class="stat__value" id="kpi-units">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Avg. order value</span>
+          <span class="stat__value" id="kpi-aov">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Top product</span>
+          <span class="stat__value" id="kpi-top-product">-</span>
+        </div>
+        <div class="stat">
+          <span class="stat__label">Top category</span>
+          <span class="stat__value" id="kpi-top-category">-</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="table-heading">
+      <h2 id="table-heading" class="section__heading">Sales records</h2>
+
+      <div class="toolbar">
+        <input
+          type="search"
+          id="sales-search"
+          class="field"
+          placeholder="Search by product..."
+          aria-label="Search sales by product name"
+        >
+        <select id="sales-category" class="field" aria-label="Filter by category">
+          <option value="">All categories</option>
+        </select>
+        <select id="sales-sort" class="field" aria-label="Sort records">
+          <option value="">Default order</option>
+          <option value="revenue-desc">Revenue: high to low</option>
+          <option value="revenue-asc">Revenue: low to high</option>
+          <option value="date-desc">Date: newest first</option>
+          <option value="date-asc">Date: oldest first</option>
+          <option value="quantity-desc">Quantity: high to low</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Revenue</th>
+              <th>Region</th>
+            </tr>
+          </thead>
+          <tbody id="sales-table-body"></tbody>
+        </table>
+      </div>
+
+      <div id="sales-empty" class="empty-state">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="4" y="8" width="40" height="32" rx="4"/>
+            <line x1="4" y1="18" x2="44" y2="18"/>
+            <line x1="16" y1="18" x2="16" y2="40"/>
+            <line x1="30" y1="18" x2="30" y2="40"/>
+          </svg>
+        </div>
+        <p class="empty-state__headline">No sales records found</p>
+        <p class="empty-state__hint">Try adjusting your search or filter criteria.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Skye8 - JavaScript Practical Assessment - SKY8-JSA-001</p>
+    <p>Maintainer: Engr. Lionel A. | <span data-year></span></p>
+  </footer>
+
+  <script src="../assets/js/shell.js" defer></script>
+  <script src="data.js" defer></script>
+  <script src="task-5.js" defer></script>
+
+</body>
+</html>
