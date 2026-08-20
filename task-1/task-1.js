@@ -85,7 +85,33 @@ return total;
 
 // TODO [T1-05]: Build the list from state. Clear it first. No innerHTML
 // concatenation of unescaped user input.
-function renderExpenses() {}
+function renderExpenses() {
+  els.list.innerHTML = "";
+
+  for (let i = 0; i < expenses.length; i++) {
+   const expense = expenses[i];
+
+   const li = document.createElement("li");
+   li.className = "list-item";
+
+   const nameSpan = document.createElement("span");
+   nameSpan.textContent = expense.name;
+
+   const amountSpan = document.createElement("span");
+   amountSpan.textContent = expense.amount.toFixed(2);
+
+   const deleteBtn = document.createElement("button");
+   deleteBtn.textContent = "Delete";
+   deleteBtn.type = "button";
+   deleteBtn.dataset.id = expense.id;
+
+   li.appendChild(nameSpan);
+   li.appendChild(amountSpan);
+   li.appendChild(deleteBtn);
+
+   els.list.appendChild(li);
+ }
+}
 
 // TODO [T1-06]: Toggle the empty state and refresh the total and count.
 function renderSummary() {}
