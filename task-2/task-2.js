@@ -2,10 +2,6 @@
  * Skye8 JavaScript Practical Assessment
  * Task 2 - Student Grade Manager
  *
- * Starter file. Implement the functions marked TODO.
- * Do not rename the exported function names or the element ids: the
- * grading rubric references them directly.
- *
  * Maintainer: Engr. Lionel A.
  */
 "use strict";
@@ -130,7 +126,6 @@ function calculateStats() {
   };
 }
 
-
 // [T2-06]: Build the student list from state. Clear it first.
 function renderStudents() {
   els.list.innerHTML = "";
@@ -172,6 +167,7 @@ function renderStudents() {
     els.list.appendChild(li);
   });
 }
+
 // [T2-07]: Update the statistics display and toggle the empty state.
 function renderStats() {
   const stats = calculateStats();
