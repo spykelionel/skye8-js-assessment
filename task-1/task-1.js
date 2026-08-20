@@ -28,7 +28,22 @@ let expenses = [];
 // amount that is zero or negative. Return a result object the caller can
 // use to populate the field-error elements.
 function validateExpense(name, amount) {
-  return { valid: false, errors: {} };
+  const errors = {};
+
+  if (!name || name.trim() === "") {
+  errors.name = "Expense name is required.";
+  }
+
+  if (amount === "" || amount === null || amount === undefined) {
+  errors.amount = "Amount is required.";
+} else {
+  const num = Number(amount);
+  if (Number.isNaN(num)) {
+    errors.amount = "Amount must be a valid number.";
+  } else if (num <= 0) {
+    errors.amount = "Amount must be greater than zero.";
+  }
+ }
 }
 
 // TODO [T1-02]: Add a validated expense to state and re-render.
