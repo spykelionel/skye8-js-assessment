@@ -67,11 +67,34 @@ function validateTodo(text) {
 }
 
 // TODO [T3-04]: Add a new task to state, save, and re-render.
-function addTodo(text) {}
+function addTodo(text) {
+  var newTodo = {
+    id: Date.now().toString() + "_" + Math.random().toString(36).substring(2, 9),
+    text: text.trim(),
+    completed: false,
+    createdAt: new Date().toISOString(),
+  };
+
+  todos.push(newTodo);
+  saveState();
+  renderTodos();
+  renderStats();
+}
 
 // TODO [T3-05]: Toggle the completed status of a task by id, save,
 // and re-render.
-function toggleTodo(id) {}
+function toggleTodo(id) {
+  todos = todos.map(function (todo) {
+    if (todo.id === id) {
+      return Object.assign({}, todo, { completed: !todo.completed });
+    }
+    return todo;
+  });
+
+  saveState();
+  renderTodos();
+  renderStats();
+}
 
 // TODO [T3-06]: Remove a task by id, save, and re-render.
 function removeTodo(id) {}
