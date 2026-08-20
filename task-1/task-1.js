@@ -23,12 +23,37 @@ const els = {
 /** @type {{ id: string, name: string, amount: number }[]} */
 let expenses = [];
 
+//help clear errors within the form
+function clearErrors() {
+  if (!els.form) return;
+  const errorElements = els.form.querySelectorAll(".field-error");
+  errorElements.forEach((el) => {
+    el.textContent = "";
+  });
+}
+
+//populate field error elements corresponding to validated fields
+function displayErrors(errors) {
+  clearErrors();
+  if (errors.name && els.name) {
+    const nameFieldError = els.name.closest(".field")?.querySelector(".field-error") 
+      || document.getElementById("name-error");
+    if (nameFieldError) nameFieldError.textContent = errors.name;
+  }
+  if (errors.amount && els.amount) {
+    const amountFieldError = els.amount.closest(".field")?.querySelector(".field-error") 
+      || document.getElementById("amount-error");
+    if (amountFieldError) amountFieldError.textContent = errors.amount;
+  }
+}
+
 // TODO [T1-01]: Validate the submitted name and amount.
 // Reject an empty name, an empty amount, a non-numeric amount and any
 // amount that is zero or negative. Return a result object the caller can
 // use to populate the field-error elements.
 function validateExpense(name, amount) {
-  return { valid: false, errors: {} };
+  const errors = {};
+  const trimmedName = typeof name === "string" ? name.trim() : "";
 }
 
 // TODO [T1-02]: Add a validated expense to state and re-render.
