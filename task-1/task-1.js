@@ -2,10 +2,6 @@
  * Skye8 JavaScript Practical Assessment
  * Task 1 - Interactive Expense Calculator
  *
- * Starter file. Implement the functions marked TODO.
- * Do not rename the exported function names or the element ids: the
- * grading rubric references them directly.
- *
  * Maintainer: Engr. Lionel A.
  */
 "use strict";
@@ -23,7 +19,9 @@ const els = {
 /** @type {{ id: string, name: string, amount: number }[]} */
 let expenses = [];
 
-//help clear errors within the form
+/**
+ * Helper: Clears all `.field-error` elements within the form.
+ */
 function clearErrors() {
   if (!els.form) return;
   const errorElements = els.form.querySelectorAll(".field-error");
@@ -32,7 +30,10 @@ function clearErrors() {
   });
 }
 
-//populate field error elements corresponding to validated fields
+/**
+ * Helper: Populates `.field-error` elements corresponding to validated fields.
+ * @param {Record<string, string>} errors 
+ */
 function displayErrors(errors) {
   clearErrors();
   if (errors.name && els.name) {
@@ -54,9 +55,8 @@ function displayErrors(errors) {
 function validateExpense(name, amount) {
   const errors = {};
   const trimmedName = typeof name === "string" ? name.trim() : "";
-}
 
-// Validate Name
+  // Validate Name
   if (!trimmedName) {
     errors.name = "Expense name is required.";
   }
@@ -77,6 +77,7 @@ function validateExpense(name, amount) {
     valid: Object.keys(errors).length === 0,
     errors: errors
   };
+}
 
 // TODO [T1-02]: Add a validated expense to state and re-render.
 function addExpense(name, amount) {
@@ -145,11 +146,72 @@ function renderExpenses() {
 }
 
 // TODO [T1-06]: Toggle the empty state and refresh the total and count.
-function renderSummary() {}
+function renderSummary() {
+  const total = calculateTotal();
+  const count = expenses.length;
 
+  if (els.total) {
+    els.total.textContent = total.toLocaleString("en-US") + " XAF";
+  }
+
+  if (els.count) {
+    els.count.textContent = count.toString();
+  }
+
+  if (els.empty) {
+    if (count === 0) {
+      els.empty.style.display = "block";
+      els.empty.removeAttribute("hidden");
+    } else {
+      els.empty.style.display = "none";
+      els.empty.setAttribute("hidden", "true");
+    }
+  }
+}
+
+// TODO [T1-07]: Bind the form submit and the delete delegation, then
+// perform the first render.
 function init() {
-  // TODO [T1-07]: Bind the form submit and the delete delegation, then
-  // perform the first render.
+  // Bind form submission
+  if (els.form) {
+    els.form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      clearErrors();
+
+      const rawName = els.name ? els.name.value : "";
+      const rawAmount = els.amount ? els.amount.value : "";
+
+      const result = validateExpense(rawName, rawAmount);
+
+      if (!result.valid) {
+        displayErrors(result.errors);
+        return;
+      }
+
+      addExpense(rawName, rawAmount);
+
+      els.form.reset();
+      if (els.name) els.name.focus();
+    });
+  }
+
+  // Bind event delegation for deleting expenses
+  if (els.list) {
+    els.list.addEventListener("click", function (e) {
+      const deleteBtn = e.target.closest("button[data-id]");
+      if (deleteBtn) {
+        const id = deleteBtn.getAttribute("data-id");
+        if (id) {
+          removeExpense(id);
+        }
+      }
+    });
+  }
+
+  // Perform initial rendering on load
+  renderExpenses();
+  renderSummary();
 }
 
 document.addEventListener("DOMContentLoaded", init);
