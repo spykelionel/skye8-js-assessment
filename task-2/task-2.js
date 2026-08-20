@@ -98,7 +98,43 @@ renderStats();
 // Return average (one decimal), highest, lowest and count. With zero
 // students every stat must be a dash, never NaN.
 function calculateStats() {
-  return { average: "-", highest: "-", lowest: "-", count: 0 };
+  const count = students.length;
+
+if (count === 0) {
+  return {
+    average: "-",
+    highest: "-",
+    lowest: "-",
+    count: 0
+  };
+}
+
+let total = 0;
+let highest = students[0].score;
+let lowest = students[0].score;
+
+for (let i = 0; i < students.length; i++) {
+  const score = students[i].score;
+
+  total = total + score;
+
+  if (score > highest) {
+    highest = score;
+  }
+
+  if (score < lowest) {
+    lowest = score;
+  }
+}
+
+const average = (total / count).toFixed(1);
+
+return {
+  average: average,
+  highest: highest,
+  lowest: lowest,
+  count: count
+};
 }
 
 // TODO [T2-06]: Build the student list from state. Clear it first.
