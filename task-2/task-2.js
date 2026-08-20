@@ -70,7 +70,19 @@ return {
 }
 
 // TODO [T2-03]: Add a validated student to state and re-render.
-function addStudent(name, score) {}
+function addStudent(name, score) {
+  const student = {
+  id: crypto.randomUUID(),
+  name: name.trim(),
+  score: Number(score),
+  grade: getGrade(Number(score))
+};
+
+students.push(student);
+
+renderStudents();
+renderStats();
+}
 
 // TODO [T2-04]: Remove one student by id and re-render.
 function removeStudent(id) {}
