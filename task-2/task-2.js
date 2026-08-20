@@ -171,7 +171,22 @@ for (let i = 0; i < students.length; i++) {
 }
 
 // TODO [T2-07]: Update the statistics display and toggle the empty state.
-function renderStats() {}
+function renderStats() {
+  const stats = calculateStats();
+
+els.average.textContent = stats.average;
+els.highest.textContent = stats.highest;
+els.lowest.textContent = stats.lowest;
+els.count.textContent = stats.count;
+
+if (stats.count === 0) {
+  els.empty.hidden = false;
+  els.list.hidden = true;
+} else {
+  els.empty.hidden = true;
+  els.list.hidden = false;
+}
+}
 
 function init() {
   // TODO [T2-08]: Bind the form submit and the delete delegation, then
