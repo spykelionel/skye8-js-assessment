@@ -100,25 +100,103 @@ function addStudent(name, score) {
   renderStats();
   return true;
 }
-// TODO [T2-04]: Remove one student by id and re-render.
-function removeStudent(id) {}
 
-// TODO [T2-05]: Calculate class statistics from the students array.
+// [T2-04]: Remove one student by id and re-render.
+function removeStudent(id) {
+  students = students.filter((student) => student.id !== id);
+  renderStudents();
+  renderStats();
+}
+
+// [T2-05]: Calculate class statistics from the students array.
 // Return average (one decimal), highest, lowest and count. With zero
 // students every stat must be a dash, never NaN.
 function calculateStats() {
-  return { average: "-", highest: "-", lowest: "-", count: 0 };
+  if (students.length === 0) {
+    return { average: "-", highest: "-", lowest: "-", count: 0 };
+  }
+
+  const scores = students.map((s) => s.score);
+  const total = scores.reduce((sum, val) => sum + val, 0);
+  const avg = (total / students.length).toFixed(1);
+  const max = Math.max(...scores);
+  const min = Math.min(...scores);
+
+  return {
+    average: avg,
+    highest: max,
+    lowest: min,
+    count: students.length,
+  };
 }
 
-// TODO [T2-06]: Build the student list from state. Clear it first.
-function renderStudents() {}
 
-// TODO [T2-07]: Update the statistics display and toggle the empty state.
-function renderStats() {}
+// [T2-06]: Build the student list from state. Clear it first.
+function renderStudents() {
+  els.list.innerHTML = "";
+
+  if (students.length === 0) {
+    els.empty.style.display = "block";
+    return;
+  }
+
+  els.empty.style.display = "none";
+
+  students.forEach((student) => {
+    const li = document.createElement("li");
+    li.className = "list-item";
+
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "list-item__info";
+
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "list-item__name";
+    nameSpan.textContent = student.name;
+
+    const detailsSpan = document.createElement("span");
+    detailsSpan.className = "list-item__details";
+    detailsSpan.textContent = `Score: ${student.score} | Grade: ${student.grade}`;
+
+    infoDiv.appendChild(nameSpan);
+    infoDiv.appendChild(detailsSpan);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn btn--danger btn--sm";
+    deleteBtn.dataset.id = student.id;
+    deleteBtn.textContent = "Delete";
+
+    li.appendChild(infoDiv);
+    li.appendChild(deleteBtn);
+
+    els.list.appendChild(li);
+  });
+}
+// [T2-07]: Update the statistics display and toggle the empty state.
+function renderStats() {
+  const stats = calculateStats();
+  els.average.textContent = stats.average;
+  els.highest.textContent = stats.highest;
+  els.lowest.textContent = stats.lowest;
+  els.count.textContent = stats.count;
+}
 
 function init() {
-  // TODO [T2-08]: Bind the form submit and the delete delegation, then
-  // perform the first render.
+  // [T2-08]: Bind the form submit and delete delegation, then perform first render.
+  els.form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    addStudent(els.name.value, els.score.value);
+  });
+
+  els.list.addEventListener("click", (event) => {
+    const target = event.target;
+    if (target && target.matches("button[data-id]")) {
+      removeStudent(target.dataset.id);
+    }
+  });
+
+  renderStudents();
+  renderStats();
 }
 
 document.addEventListener("DOMContentLoaded", init);
