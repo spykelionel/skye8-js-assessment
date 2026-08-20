@@ -30,20 +30,23 @@ let expenses = [];
 function validateExpense(name, amount) {
   const errors = {};
 
-  if (!name || name.trim() === "") {
-  errors.name = "Expense name is required.";
+  if (!name.trim()) {
+    errors.name = "Expense name is required.";
   }
 
-  if (amount === "" || amount === null || amount === undefined) {
-  errors.amount = "Amount is required.";
-} else {
-  const num = Number(amount);
-  if (Number.isNaN(num)) {
-    errors.amount = "Amount must be a valid number.";
-  } else if (num <= 0) {
+  if (!amount.trim()) {
+    errors.amount = "Amount is required.";
+  } else if (Number.isNaN(Number(amount))) {
+    errors.amount = "Amount must be a number.";
+  } else if (Number(amount) <= 0) {
     errors.amount = "Amount must be greater than zero.";
   }
- }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors,
+  };
+  
 }
 
 // TODO [T1-02]: Add a validated expense to state and re-render.
