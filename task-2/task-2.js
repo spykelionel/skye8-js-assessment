@@ -63,9 +63,43 @@ function validateStudent(name, score) {
   };
 }
 
-// TODO [T2-03]: Add a validated student to state and re-render.
-function addStudent(name, score) {}
+// [T2-03]: Add a validated student to state and re-render.
+function addStudent(name, score) {
+  const nameErrorEl = document.getElementById("student-name-error");
+  const scoreErrorEl = document.getElementById("student-score-error");
 
+  if (nameErrorEl) nameErrorEl.textContent = "";
+  if (scoreErrorEl) scoreErrorEl.textContent = "";
+
+  const validation = validateStudent(name, score);
+
+  if (!validation.valid) {
+    if (validation.errors.name && nameErrorEl) {
+      nameErrorEl.textContent = validation.errors.name;
+    }
+    if (validation.errors.score && scoreErrorEl) {
+      scoreErrorEl.textContent = validation.errors.score;
+    }
+    return false;
+  }
+
+  const numericScore = Number(score.trim());
+  const newStudent = {
+    id: Date.now().toString(36) + Math.random().toString(36).substring(2, 5),
+    name: name.trim(),
+    score: numericScore,
+    grade: getGrade(numericScore),
+  };
+
+  students.push(newStudent);
+
+  els.name.value = "";
+  els.score.value = "";
+
+  renderStudents();
+  renderStats();
+  return true;
+}
 // TODO [T2-04]: Remove one student by id and re-render.
 function removeStudent(id) {}
 
