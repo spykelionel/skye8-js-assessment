@@ -113,14 +113,109 @@ function calculateTotal() {
 
 // TODO [T1-05]: Build the list from state. Clear it first. No innerHTML
 // concatenation of unescaped user input.
-function renderExpenses() {}
+function renderExpenses() {
+  // Clear the list first
+  els.list.innerHTML = "";
+
+  // Create a list item for each expense
+  for (var i = 0; i < expenses.length; i++) {
+    var expense = expenses[i];
+
+    // Create the list item element
+    var listItem = document.createElement("li");
+    listItem.className = "list-item";
+
+    // Primary text (name)
+    var primary = document.createElement("span");
+    primary.className = "list-item__primary";
+    primary.textContent = expense.name;
+
+    // Meta text (amount)
+    var meta = document.createElement("span");
+    meta.className = "list-item__meta";
+    meta.textContent = expense.amount.toFixed(2) + " XAF";
+
+    // Actions container
+    var actions = document.createElement("div");
+    actions.className = "list-item__actions";
+
+    // Delete button
+    var deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn btn--danger";
+    deleteBtn.textContent = "Delete";
+    deleteBtn.setAttribute("data-id", expense.id);
+
+    actions.appendChild(deleteBtn);
+    listItem.appendChild(primary);
+    listItem.appendChild(meta);
+    listItem.appendChild(actions);
+
+    els.list.appendChild(listItem);
+  }
+}
+
 
 // TODO [T1-06]: Toggle the empty state and refresh the total and count.
-function renderSummary() {}
+function renderSummary() {
+  var total = calculateTotal();
+  var count = expenses.length;
+
+  // Show total with 2 decimal places, or dash if empty
+  if (count === 0) {
+    els.total.textContent = "-";
+  } else {
+    els.total.textContent = total.toFixed(2) + " XAF";
+  }
+
+  els.count.textContent = String(count);
+
+  // Show or hide the empty state
+  if (count === 0) {
+    els.empty.hidden = false;
+  } else {
+    els.empty.hidden = true;
+  }
+}
 
 function init() {
   // TODO [T1-07]: Bind the form submit and the delete delegation, then
   // perform the first render.
+
+  // Handle form submit
+  els.form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var nameValue = els.name.value;
+    var amountValue = els.amount.value;
+
+    var result = validateExpense(nameValue, amountValue);
+
+    // Show errors if any
+    var nameErrorEl = document.getElementById("expense-name-error");
+    var amountErrorEl = document.getElementById("expense-amount-error");
+
+    nameErrorEl.textContent = result.errors.name || "";
+    amountErrorEl.textContent = result.errors.amount || "";
+
+    if (result.valid) {
+      addExpense(nameValue, amountValue);
+    }
+  });
+
+  // Handle delete button clicks (event delegation)
+  els.list.addEventListener("click", function (event) {
+    var target = event.target;
+    if (target.tagName === "BUTTON" && target.getAttribute("data-id")) {
+      var idToRemove = target.getAttribute("data-id");
+      removeExpense(idToRemove);
+    }
+  });
+
+  // First render
+  renderExpenses();
+  renderSummary();
 }
+
 
 document.addEventListener("DOMContentLoaded", init);
