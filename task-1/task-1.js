@@ -63,7 +63,14 @@ function addExpense(name, amount) {
 }
 
 // TODO [T1-03]: Remove one expense by id and re-render.
-function removeExpense(id) {}
+function removeExpense(id) {
+  expenses = expenses.filter(function(expense) {
+  return expense.id !== id;
+ });
+
+  renderExpenses();
+  renderSummary();
+}
 
 // TODO [T1-04]: Sum the amounts. Must be derived, never stored.
 function calculateTotal() {
