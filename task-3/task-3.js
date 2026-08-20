@@ -49,12 +49,21 @@ function loadState() {
 }
 // TODO [T3-02]: Save the current todos array to localStorage under
 // STORAGE_KEY using JSON.stringify.
-function saveState() {}
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  } catch (error) {
+    console.error("Failed to save todos to localStorage:", error);
+  }
+}
 
 // TODO [T3-03]: Validate the submitted text. Reject empty strings and
 // whitespace-only strings.
 function validateTodo(text) {
-  return { valid: false, error: "" };
+  if (typeof text !== "string" || text.trim() === "") {
+    return { valid: false, error: "Task description cannot be empty." };
+  }
+  return { valid: true, error: "" };
 }
 
 // TODO [T3-04]: Add a new task to state, save, and re-render.
