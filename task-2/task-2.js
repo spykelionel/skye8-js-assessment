@@ -85,7 +85,14 @@ renderStats();
 }
 
 // TODO [T2-04]: Remove one student by id and re-render.
-function removeStudent(id) {}
+function removeStudent(id) {
+  students = students.filter(function(student) {
+  return student.id !== id;
+});
+
+renderStudents();
+renderStats();
+}
 
 // TODO [T2-05]: Calculate class statistics from the students array.
 // Return average (one decimal), highest, lowest and count. With zero
