@@ -25,17 +25,42 @@ const els = {
 /** @type {{ id: string, name: string, score: number, grade: string }[]} */
 let students = [];
 
-// TODO [T2-01]: Derive a letter grade from a numeric score.
+// [T2-01]: Derive a letter grade from a numeric score.
 // A: 80-100, B: 70-79, C: 60-69, D: 50-59, F: below 50.
 function getGrade(score) {
-  return "";
+  if (score >= 80) return "A";
+  if (score >= 70) return "B";
+  if (score >= 60) return "C";
+  if (score >= 50) return "D";
+  return "F";
 }
 
-// TODO [T2-02]: Validate the submitted name and score.
-// Reject an empty name, a non-numeric score, a score below 0 and a
-// score above 100.
+// [T2-02]: Validate the submitted name and score.
+// Reject an empty name, a non-numeric score, a score below 0 and a score above 100.
 function validateStudent(name, score) {
-  return { valid: false, errors: {} };
+  const errors = {};
+  const trimmedName = typeof name === "string" ? name.trim() : "";
+  const trimmedScore = typeof score === "string" ? score.trim() : "";
+
+  if (!trimmedName) {
+    errors.name = "Student name is required.";
+  }
+
+  if (!trimmedScore) {
+    errors.score = "Score is required.";
+  } else {
+    const numericScore = Number(trimmedScore);
+    if (isNaN(numericScore)) {
+      errors.score = "Score must be a valid number.";
+    } else if (numericScore < 0 || numericScore > 100) {
+      errors.score = "Score must be between 0 and 100.";
+    }
+  }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors,
+  };
 }
 
 // TODO [T2-03]: Add a validated student to state and re-render.
