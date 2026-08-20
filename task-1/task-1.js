@@ -56,20 +56,93 @@ function validateExpense(name, amount) {
   const trimmedName = typeof name === "string" ? name.trim() : "";
 }
 
+// Validate Name
+  if (!trimmedName) {
+    errors.name = "Expense name is required.";
+  }
+
+  // Validate Amount
+  if (amount === "" || amount === null || amount === undefined) {
+    errors.amount = "Amount is required.";
+  } else {
+    const numAmount = Number(amount);
+    if (Number.isNaN(numAmount)) {
+      errors.amount = "Amount must be a valid number.";
+    } else if (numAmount <= 0) {
+      errors.amount = "Amount must be greater than zero.";
+    }
+  }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors: errors
+  };
+
 // TODO [T1-02]: Add a validated expense to state and re-render.
-function addExpense(name, amount) {}
+function addExpense(name, amount) {
+  const newExpense = {
+    id: "exp_" + Date.now() + "_" + Math.random().toString(36).substring(2, 6),
+    name: name.trim(),
+    amount: Number(amount)
+  };
+
+  expenses.push(newExpense);
+
+  renderExpenses();
+  renderSummary();
+}
 
 // TODO [T1-03]: Remove one expense by id and re-render.
-function removeExpense(id) {}
+function removeExpense(id) {
+  expenses = expenses.filter((expense) => expense.id !== id);
+  renderExpenses();
+  renderSummary();
+}
 
 // TODO [T1-04]: Sum the amounts. Must be derived, never stored.
 function calculateTotal() {
-  return 0;
+  return expenses.reduce((sum, item) => sum + item.amount, 0);
 }
 
 // TODO [T1-05]: Build the list from state. Clear it first. No innerHTML
 // concatenation of unescaped user input.
-function renderExpenses() {}
+function renderExpenses() {
+  if (!els.list) return;
+
+  // Clear existing nodes safely
+  els.list.textContent = "";
+
+  expenses.forEach((expense) => {
+    const li = document.createElement("li");
+    li.className = "expense-item";
+
+    const infoDiv = document.createElement("div");
+    infoDiv.className = "expense-item__info";
+
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "expense-item__name";
+    nameSpan.textContent = expense.name;
+
+    const amountSpan = document.createElement("span");
+    amountSpan.className = "expense-item__amount";
+    amountSpan.textContent = expense.amount.toLocaleString("en-US") + " XAF";
+
+    infoDiv.appendChild(nameSpan);
+    infoDiv.appendChild(amountSpan);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn btn--danger btn--sm";
+    deleteBtn.textContent = "Delete";
+    deleteBtn.setAttribute("data-id", expense.id);
+    deleteBtn.setAttribute("aria-label", `Delete expense ${expense.name}`);
+
+    li.appendChild(infoDiv);
+    li.appendChild(deleteBtn);
+
+    els.list.appendChild(li);
+  });
+}
 
 // TODO [T1-06]: Toggle the empty state and refresh the total and count.
 function renderSummary() {}
