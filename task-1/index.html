@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task 1 - Interactive Expense Calculator</title>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body data-task="1">
 
   <header class="site-header">
@@ -36,25 +38,12 @@
         <div class="form-grid">
           <div class="form-row">
             <label for="expense-name">Expense name</label>
-            <input
-              type="text"
-              id="expense-name"
-              class="field"
-              placeholder="e.g. Office supplies"
-              required
-            >
+            <input type="text" id="expense-name" class="field" placeholder="e.g. Office supplies" required>
             <span id="expense-name-error" class="field-error" role="alert"></span>
           </div>
           <div class="form-row">
             <label for="expense-amount">Amount</label>
-            <input
-              type="text"
-              inputmode="decimal"
-              id="expense-amount"
-              class="field"
-              placeholder="0.00"
-              required
-            >
+            <input type="text" inputmode="decimal" id="expense-amount" class="field" placeholder="0.00" required>
             <span id="expense-amount-error" class="field-error" role="alert"></span>
           </div>
         </div>
@@ -83,9 +72,9 @@
         <div id="expense-empty" class="empty-state">
           <div class="empty-state__icon" aria-hidden="true">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="6" y="10" width="36" height="28" rx="4"/>
-              <line x1="14" y1="22" x2="34" y2="22"/>
-              <line x1="14" y1="30" x2="26" y2="30"/>
+              <rect x="6" y="10" width="36" height="28" rx="4" />
+              <line x1="14" y1="22" x2="34" y2="22" />
+              <line x1="14" y1="30" x2="26" y2="30" />
             </svg>
           </div>
           <p class="empty-state__headline">No expenses yet</p>
@@ -105,4 +94,5 @@
   <script src="task-1.js" defer></script>
 
 </body>
+
 </html>
