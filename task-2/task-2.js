@@ -191,6 +191,42 @@ if (stats.count === 0) {
 function init() {
   // TODO [T2-08]: Bind the form submit and the delete delegation, then
   // perform the first render.
+
+  els.form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  document.getElementById("student-name-error").textContent = "";
+  document.getElementById("student-score-error").textContent = "";
+
+  const name = els.name.value;
+  const score = els.score.value;
+
+  const result = validateStudent(name, score);
+
+  if (!result.valid) {
+    if (result.errors.name) {
+      document.getElementById("student-name-error").textContent = result.errors.name;
+    }
+    if (result.errors.score) {
+      document.getElementById("student-score-error").textContent = result.errors.score;
+    }
+    return;
+  }
+
+  addStudent(name, score);
+  els.form.reset();
+  els.name.focus();
+});
+
+els.list.addEventListener("click", function(e) {
+  if (e.target.tagName === "BUTTON") {
+    const id = e.target.dataset.id;
+    removeStudent(id);
+  }
+});
+
+renderStudents();
+renderStats();
 }
 
 document.addEventListener("DOMContentLoaded", init);
