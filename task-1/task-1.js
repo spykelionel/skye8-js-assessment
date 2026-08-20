@@ -133,6 +133,42 @@ function renderSummary() {
 function init() {
   // TODO [T1-07]: Bind the form submit and the delete delegation, then
   // perform the first render.
-}
+
+  els.form.addEventListener("submit", function(e) {
+   e.preventDefault();
+
+   document.getElementById("expense-name-error").textContent = "";
+   document.getElementById("expense-amount-error").textContent = "";
+
+   const name = els.name.value;
+   const amount = els.amount.value;
+
+   const result = validateExpense(name, amount);
+
+   if (!result.valid) {
+     if (result.errors.name) {
+       document.getElementById("expense-name-error").textContent = result.errors.name;
+     }
+     if (result.errors.amount) {
+       document.getElementById("expense-amount-error").textContent = result.errors.amount;
+     }
+     return;
+   }
+
+   addExpense(name, amount);
+     els.form.reset();
+     els.name.focus();
+   });
+
+  els.list.addEventListener("click", function(e) {
+     if (e.target.tagName === "BUTTON") {
+      const id = e.target.dataset.id;
+      removeExpense(id);
+   }
+  });
+
+  renderExpenses();
+  renderSummary();
+ }
 
 document.addEventListener("DOMContentLoaded", init);
