@@ -35,9 +35,18 @@ var currentFilter = "all";
 // Parse with JSON.parse inside a try/catch. Corrupt or absent data
 // must produce an empty array, never a thrown error.
 function loadState() {
-  return [];
+  try {
+    var rawData = localStorage.getItem(STORAGE_KEY);
+    if (!rawData) {
+      return [];
+    }
+    var parsed = JSON.parse(rawData);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error("Failed to load todos from localStorage:", error);
+    return [];
+  }
 }
-
 // TODO [T3-02]: Save the current todos array to localStorage under
 // STORAGE_KEY using JSON.stringify.
 function saveState() {}
