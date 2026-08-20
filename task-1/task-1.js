@@ -134,8 +134,8 @@ function renderList() {
     item.appendChild(amountSpan);
     item.appendChild(deleteButton);
     listEl.appendChild(item);
-  });
-}
+  };
+
  
 // FEATURE 7: UPDATE TOTAL AND COUNT
 function renderSummary() {
