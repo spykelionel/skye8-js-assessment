@@ -52,9 +52,46 @@ function applyFilters(records, category) {
 // An empty sort value returns the array unchanged. Never mutate the
 // input array.
 function applySort(records, sortValue) {
-  return records;
-}
+  var sortedRecords = records.slice();
 
+  if (sortValue === "revenue-asc") {
+    sortedRecords.sort(function (a, b) {
+      return (a.quantity * a.price) - (b.quantity * b.price);
+    });
+  }
+
+  if (sortValue === "revenue-desc") {
+    sortedRecords.sort(function (a, b) {
+      return (b.quantity * b.price) - (a.quantity * a.price);
+    });
+  }
+
+  if (sortValue === "units-asc") {
+    sortedRecords.sort(function (a, b) {
+      return a.quantity - b.quantity;
+    });
+  }
+
+  if (sortValue === "units-desc") {
+    sortedRecords.sort(function (a, b) {
+      return b.quantity - a.quantity;
+    });
+  }
+
+  if (sortValue === "product-asc") {
+    sortedRecords.sort(function (a, b) {
+      return a.product.localeCompare(b.product);
+    });
+  }
+
+  if (sortValue === "product-desc") {
+    sortedRecords.sort(function (a, b) {
+      return b.product.localeCompare(a.product);
+    });
+  }
+
+  return sortedRecords;
+}
 // TODO [T5-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the filtered,
 // sorted array.
