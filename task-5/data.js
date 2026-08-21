@@ -8,7 +8,7 @@
  *
  * Maintainer: Engr. Lionel A.
  */
-
+ 
 /* eslint-disable */
 var SALES = Object.freeze([
   { id: "S01", product: "ProBook 450 Laptop",     category: "Laptops",     quantity: 2,  price: 485000, date: "2025-01-05", region: "Douala"    },
