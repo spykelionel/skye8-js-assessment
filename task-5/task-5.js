@@ -132,7 +132,31 @@ function calcUnits(records) {
 // the provided records. Return the product name, or a dash if the
 // set is empty.
 function findTopProduct(records) {
-  return "-";
+  if (records.length === 0) {
+    return "-";
+  }
+
+  var productUnits = {};
+
+  records.forEach(function (record) {
+    if (!productUnits[record.product]) {
+      productUnits[record.product] = 0;
+    }
+
+    productUnits[record.product] += record.quantity;
+  });
+
+  var topProduct = "-";
+  var highestUnits = 0;
+
+  Object.keys(productUnits).forEach(function (product) {
+    if (productUnits[product] > highestUnits) {
+      highestUnits = productUnits[product];
+      topProduct = product;
+    }
+  });
+
+  return topProduct;
 }
 
 // TODO [T5-08]: Find the best-selling category by total revenue
