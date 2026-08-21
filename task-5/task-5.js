@@ -215,7 +215,41 @@ function renderKPIs(records) {
 // TODO [T5-10]: Build the table rows from the visible set. Clear
 // the table body first. No innerHTML concatenation of unescaped
 // user input.
-function renderTable(records) {}
+function renderTable(records) {
+  els.tableBody.replaceChildren();
+
+  records.forEach(function (record) {
+    var row = document.createElement("tr");
+
+    var dateCell = document.createElement("td");
+    dateCell.textContent = record.date;
+
+    var productCell = document.createElement("td");
+    productCell.textContent = record.product;
+
+    var categoryCell = document.createElement("td");
+    categoryCell.textContent = record.category;
+
+    var quantityCell = document.createElement("td");
+    quantityCell.textContent = record.quantity;
+
+    var priceCell = document.createElement("td");
+    priceCell.textContent = record.price.toLocaleString() + " XAF";
+
+    var revenueCell = document.createElement("td");
+    revenueCell.textContent =
+      (record.quantity * record.price).toLocaleString() + " XAF";
+
+    row.appendChild(dateCell);
+    row.appendChild(productCell);
+    row.appendChild(categoryCell);
+    row.appendChild(quantityCell);
+    row.appendChild(priceCell);
+    row.appendChild(revenueCell);
+
+    els.tableBody.appendChild(row);
+  });
+}
 
 function init() {
   // TODO [T5-11]: Populate the category dropdown from the dataset,
