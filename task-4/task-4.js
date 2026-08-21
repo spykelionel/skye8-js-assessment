@@ -107,6 +107,22 @@ function renderEmptyState(count) {}
 function init() {
   // TODO [T4-09]: Bind search, filter and sort controls, then
   // perform the first render.
+  function init() {
+  function updateProducts() {
+    var visibleProducts = getVisible();
+
+    renderProducts(visibleProducts);
+    renderCount(visibleProducts.length);
+    renderEmptyState(visibleProducts.length);
+  }
+
+  els.search.addEventListener("input", updateProducts);
+  els.category.addEventListener("change", updateProducts);
+  els.price.addEventListener("change", updateProducts);
+  els.sort.addEventListener("change", updateProducts);
+
+  updateProducts();
+}
 }
 
 document.addEventListener("DOMContentLoaded", init);
