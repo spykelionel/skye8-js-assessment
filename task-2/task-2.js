@@ -145,7 +145,40 @@ function calculateStats() {
 
 // TODO [T2-06]: Build the student list from state. Clear it first.
 function renderStudents() {
-  
+  els.list.replaceChildren();
+
+  students.forEach(function(student) {
+
+    const item = document.createElement("li");
+    item.className = "list__item";
+
+    const details = document.createElement("div");
+    details.className = "list__details";
+
+    const name = document.createElement("span");
+    name.className = "list__title";
+    name.textContent = student.name;
+
+    const score = document.createElement("span");
+    score.className = "list__meta";
+    score.textContent = "Score: " + student.score;
+
+    const grade = document.createElement("span");
+    grade.className = "list__meta";
+    grade.textContent = "Grade: " + student.grade;
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn btn--danger";
+    button.textContent = "Delete";
+    button.dataset.studentId = student.id;
+
+    details.append(name, score, grade);
+    item.append(details, button);
+
+    els.list.append(item);
+  });
+ 
 }
 
 
