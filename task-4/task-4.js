@@ -99,10 +99,14 @@ function renderProducts(products) {
 }
 
 // TODO [T4-07]: Update the visible count display.
-function renderCount(count) {}
+function renderCount(count) {
+  els.count.textContent = count;
+}
 
 // TODO [T4-08]: Toggle the empty state based on visible products.
-function renderEmptyState(count) {}
+function renderEmptyState(count) {
+  els.empty.hidden = count !== 0;
+}
 
 function init() {
   // TODO [T4-09]: Bind search, filter and sort controls, then
