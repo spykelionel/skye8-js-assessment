@@ -11,9 +11,8 @@
  * by hand -- everything on screen comes from the `expenses` array.
  */
  
-// ---------------------------------------------------------------------
 // STATE
-// ---------------------------------------------------------------------
+
 // This array is the single source of truth. Every expense is an object
 // shaped like { id, name, amount }. We never store a running total in
 // a separate variable -- the total is always calculated fresh from this
@@ -24,9 +23,9 @@ let expenses = [];
 // delete later. It just goes up by 1 each time.
 let nextExpenseId = 1;
  
-// ---------------------------------------------------------------------
+
 // GRAB THE ELEMENTS WE NEED FROM THE PAGE
-// ---------------------------------------------------------------------
+
 const form = document.getElementById('expense-form');
 const nameInput = document.getElementById('expense-name');
 const amountInput = document.getElementById('expense-amount');
