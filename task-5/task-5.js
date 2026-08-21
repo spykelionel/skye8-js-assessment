@@ -211,12 +211,16 @@ function renderTable(records) {
     els.tableBody.appendChild(tr);
   }
 }
+function update() {
+  var visible = getVisible();
+  renderKPIs(visible);
+  renderTable(visible);
+}
 
 function init() {
-  // TODO [T5-11]: Populate the category dropdown from the dataset,
-  // bind search, filter and sort controls, then perform the first
-  // render.
-
+  // Populate category dropdown from the dataset
+  // Bind events
+  // First render
   var seen = {};
   for (var i = 0; i < SALES.length; i++) {
     seen[SALES[i].category] = true;
@@ -228,19 +232,11 @@ function init() {
     opt.textContent = categories[j];
     els.category.appendChild(opt);
   }
-}
 
-function update() {
-  var visible = getVisible();
-  renderKPIs(visible);
-  renderTable(visible);
-}
-
-function init() {
-  populateCategories();
   els.search.addEventListener("input", update);
   els.category.addEventListener("change", update);
   els.sort.addEventListener("change", update);
+
   update();
 }
 
