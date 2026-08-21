@@ -87,8 +87,11 @@ function toggleTodo(id) {
       todos[i].completed = !todos[i].completed;
       break;
     }
+  }
+  saveState();
+  renderTodos();
+  renderStats();
 }
-
 // TODO [T3-06]: Remove a task by id, save, and re-render.
 function removeTodo(id) {
   todos = todos.filter(function (todo) {
@@ -193,11 +196,7 @@ function renderStats() {
   }
 }
 
-function init() {
-  // TODO [T3-10]: Load state, bind the form submit, bind filter
-  // buttons, bind toggle and delete delegation, then perform the
-  // first render.
-
+function setFilter(filter) {
   currentFilter = filter;
   els.filterAll.setAttribute("aria-pressed", filter === "all" ? "true" : "false");
   els.filterPending.setAttribute("aria-pressed", filter === "pending" ? "true" : "false");
@@ -207,6 +206,10 @@ function init() {
 }
 
 function init() {
+// TODO [T3-10]: Load state, bind the form submit, bind filter
+// buttons, bind toggle and delete delegation, then perform the
+// first render.
+
   todos = loadState();
 
   els.form.addEventListener("submit", function (e) {

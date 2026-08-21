@@ -105,37 +105,143 @@ function calcRevenue(records) {
 
 // TODO [T5-06]: Calculate total units sold from a set of records.
 function calcUnits(records) {
-  return 0;
+  var total = 0;
+  for (var i = 0; i < records.length; i++) {
+    total = total + records[i].quantity;
+  }
+  return total; 
 }
 
 // TODO [T5-07]: Find the best-selling product by total units across
 // the provided records. Return the product name, or a dash if the
 // set is empty.
 function findTopProduct(records) {
-  return "-";
+  if (records.length === 0) {
+    return "-";
+  }
+  var unitsByProduct = {};
+  for (var i = 0; i < records.length; i++) {
+    var name = records[i].product;
+    unitsByProduct[name] = (unitsByProduct[name] || 0) + records[i].quantity;
+  }
+  var topName = "-";
+  var topUnits = -1;
+  for (var product in unitsByProduct) {
+    if (unitsByProduct[product] > topUnits) {
+      topUnits = unitsByProduct[product];
+      topName = product;
+    }
+  }
+  return topName;
 }
 
 // TODO [T5-08]: Find the best-selling category by total revenue
 // across the provided records. Return the category name, or a dash
 // if the set is empty.
 function findTopCategory(records) {
-  return "-";
+  if (records.length === 0) {
+    return "-";
+  }
+  var revenueByCategory = {};
+  for (var i = 0; i < records.length; i++) {
+    var cat = records[i].category;
+    var rev = records[i].quantity * records[i].price;
+    revenueByCategory[cat] = (revenueByCategory[cat] || 0) + rev;
+  }
+  var topCat = "-";
+  var topRev = -1;
+  for (var category in revenueByCategory) {
+    if (revenueByCategory[category] > topRev) {
+      topRev = revenueByCategory[category];
+      topCat = category;
+    }
+  }
+  return topCat;
 }
 
 // TODO [T5-09]: Update all six KPI elements from the visible set.
 // KPIs must recalculate against the filtered set, not the full
 // dataset. Safe values when nothing matches: no NaN, no Infinity.
-function renderKPIs(records) {}
+function renderKPIs(records) {
+  var revenue = calcRevenue(records);
+  var orders = records.length;
+  var units = calcUnits(records);
+  var aov = orders === 0 ? 0 : revenue / orders;
+
+  els.kpiRevenue.textContent = revenue.toLocaleString() + " XAF";
+  els.kpiOrders.textContent = String(orders);
+  els.kpiUnits.textContent = String(units);
+  els.kpiAov.textContent = orders === 0 ? "-" : aov.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " XAF";
+  els.kpiTopProduct.textContent = findTopProduct(records);
+  els.kpiTopCategory.textContent = findTopCategory(records);
+}
 
 // TODO [T5-10]: Build the table rows from the visible set. Clear
 // the table body first. No innerHTML concatenation of unescaped
 // user input.
-function renderTable(records) {}
+function renderTable(records) {
+  els.tableBody.innerHTML = "";
+
+  if (records.length === 0) {
+    els.empty.hidden = false;
+    return;
+  }
+  els.empty.hidden = true;
+
+  for (var i = 0; i < records.length; i++) {
+    var r = records[i];
+    var tr = document.createElement("tr");
+
+    var cells = [
+      r.date,
+      r.product,
+      r.category,
+      String(r.quantity),
+      r.price.toLocaleString() + " XAF",
+      (r.quantity * r.price).toLocaleString() + " XAF",
+      r.region,
+    ];
+
+    for (var j = 0; j < cells.length; j++) {
+      var td = document.createElement("td");
+      td.textContent = cells[j];
+      tr.appendChild(td);
+    }
+
+    els.tableBody.appendChild(tr);
+  }
+}
 
 function init() {
   // TODO [T5-11]: Populate the category dropdown from the dataset,
   // bind search, filter and sort controls, then perform the first
   // render.
+
+  var seen = {};
+  for (var i = 0; i < SALES.length; i++) {
+    seen[SALES[i].category] = true;
+  }
+  var categories = Object.keys(seen).sort();
+  for (var j = 0; j < categories.length; j++) {
+    var opt = document.createElement("option");
+    opt.value = categories[j];
+    opt.textContent = categories[j];
+    els.category.appendChild(opt);
+  }
+}
+
+function update() {
+  var visible = getVisible();
+  renderKPIs(visible);
+  renderTable(visible);
+}
+
+function init() {
+  populateCategories();
+  els.search.addEventListener("input", update);
+  els.category.addEventListener("change", update);
+  els.sort.addEventListener("change", update);
+  update();
 }
 
 document.addEventListener("DOMContentLoaded", init);
