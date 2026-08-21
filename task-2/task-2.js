@@ -74,7 +74,19 @@ const errors = {};
 
 // TODO [T2-03]: Add a validated student to state and re-render.
 function addStudent(name, score) {
+ score = Number(score);
 
+  const student = {
+    id: Date.now().toString(),
+    name: name.trim(),
+    score: score,
+    grade: getGrade(score)
+  };
+
+  students.push(student);
+
+  renderStudents();
+  renderStats();
 }
 
 
