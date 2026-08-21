@@ -1,10 +1,19 @@
 /**
  * Task 1 - Interactive Expense Calculator
  * Skye8 - JavaScript Practical Assessment - SKY8-JSA-001
+ *
+ * This file wires up the form in index.html so that:
+ *   - typed-in expenses are validated
+ *   - valid expenses are stored in an array (our "state")
+ *   - the page re-renders itself from that array every time it changes
+ *
+ * Nothing about the total or the list is ever written into the HTML
+ * by hand -- everything on screen comes from the `expenses` array.
  */
  
+// ---------------------------------------------------------------------
 // STATE
-
+// ---------------------------------------------------------------------
 // This array is the single source of truth. Every expense is an object
 // shaped like { id, name, amount }. We never store a running total in
 // a separate variable -- the total is always calculated fresh from this
@@ -14,9 +23,10 @@ let expenses = [];
 // Used to give every new expense a unique id, so we know which one to
 // delete later. It just goes up by 1 each time.
 let nextExpenseId = 1;
-
+ 
+// ---------------------------------------------------------------------
 // GRAB THE ELEMENTS WE NEED FROM THE PAGE
-
+// ---------------------------------------------------------------------
 const form = document.getElementById('expense-form');
 const nameInput = document.getElementById('expense-name');
 const amountInput = document.getElementById('expense-amount');
@@ -120,7 +130,7 @@ function renderList() {
     const amountSpan = document.createElement('span');
     amountSpan.className = 'list__item-amount';
     amountSpan.textContent = formatAsCurrency(expense.amount);
-  });
+    
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'btn btn--icon list__item-remove';
@@ -134,6 +144,7 @@ function renderList() {
     item.appendChild(amountSpan);
     item.appendChild(deleteButton);
     listEl.appendChild(item);
+  });
   };
 
  
