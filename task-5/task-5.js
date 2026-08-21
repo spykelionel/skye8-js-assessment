@@ -193,7 +193,24 @@ function findTopCategory(records) {
 // TODO [T5-09]: Update all six KPI elements from the visible set.
 // KPIs must recalculate against the filtered set, not the full
 // dataset. Safe values when nothing matches: no NaN, no Infinity.
-function renderKPIs(records) {}
+function renderKPIs(records) {
+  var revenue = calcRevenue(records);
+  var orders = records.length;
+  var units = calcUnits(records);
+
+  var aov = 0;
+
+  if (orders > 0) {
+    aov = revenue / orders;
+  }
+
+  els.kpiRevenue.textContent = revenue.toLocaleString() + " XAF";
+  els.kpiOrders.textContent = orders;
+  els.kpiUnits.textContent = units;
+  els.kpiAov.textContent = aov.toLocaleString() + " XAF";
+  els.kpiTopProduct.textContent = findTopProduct(records);
+  els.kpiTopCategory.textContent = findTopCategory(records);
+}
 
 // TODO [T5-10]: Build the table rows from the visible set. Clear
 // the table body first. No innerHTML concatenation of unescaped
