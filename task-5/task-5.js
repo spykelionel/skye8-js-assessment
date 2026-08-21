@@ -255,6 +255,43 @@ function init() {
   // TODO [T5-11]: Populate the category dropdown from the dataset,
   // bind search, filter and sort controls, then perform the first
   // render.
+  function init() {
+  var categories = [];
+
+  SALES.forEach(function (record) {
+    if (!categories.includes(record.category)) {
+      categories.push(record.category);
+    }
+  });
+
+  categories.sort();
+
+  categories.forEach(function (category) {
+    var option = document.createElement("option");
+
+    option.value = category;
+    option.textContent = category;
+
+    els.category.appendChild(option);
+  });
+
+  function updateDashboard() {
+    var visibleRecords = getVisible();
+
+    renderKPIs(visibleRecords);
+    renderTable(visibleRecords);
+
+    els.empty.hidden = visibleRecords.length !== 0;
+  }
+
+  els.search.addEventListener("input", updateDashboard);
+
+  els.category.addEventListener("change", updateDashboard);
+
+  els.sort.addEventListener("change", updateDashboard);
+
+  updateDashboard();
+}
 }
 
 document.addEventListener("DOMContentLoaded", init);
