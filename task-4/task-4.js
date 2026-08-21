@@ -118,17 +118,45 @@ function createProductCard(product) {
 
 // TODO [T4-06]: Render the product grid from the visible set.
 // Clear it first.
-function renderProducts(products) {}
+function renderProducts(products) {
+  els.grid.innerHTML = "";
+  for (var i = 0; i < products.length; i++) {
+    els.grid.appendChild(createProductCard(products[i]));
+  }
+}
 
 // TODO [T4-07]: Update the visible count display.
-function renderCount(count) {}
+function renderCount(count) {
+  els.count.textContent = String(count);
+}
 
 // TODO [T4-08]: Toggle the empty state based on visible products.
-function renderEmptyState(count) {}
+function renderEmptyState(count) {
+  if (count === 0) {
+    els.empty.hidden = false;
+    els.grid.hidden = true;
+  } else {
+    els.empty.hidden = true;
+    els.grid.hidden = false;
+  }
+}
 
 function init() {
   // TODO [T4-09]: Bind search, filter and sort controls, then
   // perform the first render.
+
+  var visible = getVisible();
+  renderProducts(visible);
+  renderCount(visible.length);
+  renderEmptyState(visible.length);
+}
+
+function init() {
+  els.search.addEventListener("input", update);
+  els.category.addEventListener("change", update);
+  els.price.addEventListener("change", update);
+  els.sort.addEventListener("change", update);
+  update();
 }
 
 document.addEventListener("DOMContentLoaded", init);
