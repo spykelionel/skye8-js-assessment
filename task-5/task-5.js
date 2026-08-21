@@ -123,7 +123,9 @@ function calcRevenue(records) {
 }
 // TODO [T5-06]: Calculate total units sold from a set of records.
 function calcUnits(records) {
-  return 0;
+  return records.reduce(function (total, record) {
+    return total + record.quantity;
+  }, 0);
 }
 
 // TODO [T5-07]: Find the best-selling product by total units across
