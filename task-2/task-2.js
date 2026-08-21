@@ -47,8 +47,7 @@ function getGrade(score) {
 // Reject an empty name, a non-numeric score, a score below 0 and a
 // score above 100.
 function validateStudent(name, score) {
-
-  const errors = {};
+const errors = {};
 
   name = name.trim();
   score = score.trim();
@@ -69,24 +68,13 @@ function validateStudent(name, score) {
     valid: Object.keys(errors).length === 0,
     errors: errors
   };
+
 }
 
 
 // TODO [T2-03]: Add a validated student to state and re-render.
 function addStudent(name, score) {
-  score = Number(score);
 
-  const student = {
-    id: Date.now().toString(),
-    name: name.trim(),
-    score: score,
-    grade: getGrade(score)
-  };
-
-  students.push(student);
-
-  renderStudents();
-  renderStats();
 }
 
 
@@ -105,39 +93,7 @@ function removeStudent(id) {
 // Return average (one decimal), highest, lowest and count. With zero
 // students every stat must be a dash, never NaN.
 function calculateStats() {
-  if (students.length === 0) {
-    return {
-      average: "-",
-      highest: "-",
-      lowest: "-",
-      count: 0
-    };
-  }
 
-  let total = 0;
-  let highest = students[0].score;
-  let lowest = students[0].score;
-
-  students.forEach(function(student) {
-
-    total = total + student.score;
-
-    if (student.score > highest) {
-      highest = student.score;
-    }
-
-    if (student.score < lowest) {
-      lowest = student.score;
-    }
-  });
-   const average = total / students.length;
-
-  return {
-    average: average.toFixed(1),
-    highest: highest,
-    lowest: lowest,
-    count: students.length
-  };
 }
 
 
@@ -145,39 +101,7 @@ function calculateStats() {
 
 // TODO [T2-06]: Build the student list from state. Clear it first.
 function renderStudents() {
-   els.list.replaceChildren();
-
-  students.forEach(function(student) {
-
-    const item = document.createElement("li");
-    item.className = "list__item";
-
-    const details = document.createElement("div");
-    details.className = "list__details";
-
-    const name = document.createElement("span");
-    name.className = "list__title";
-    name.textContent = student.name;
-
-    const score = document.createElement("span");
-    score.className = "list__meta";
-    score.textContent = "Score: " + student.score;
-
-    const grade = document.createElement("span");
-    grade.className = "list__meta";
-    grade.textContent = "Grade: " + student.grade;
-
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "btn btn--danger";
-    button.textContent = "Delete";
-    button.dataset.studentId = student.id;
-
-    details.append(name, score, grade);
-    item.append(details, button);
-
-    els.list.append(item);
-  });
+  
 }
 
 
@@ -204,49 +128,7 @@ function renderStats() {
 function init() {
   // TODO [T2-08]: Bind the form submit and the delete delegation, then
   // perform the first render.
-   els.form.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-    const nameError = document.getElementById("student-name-error");
-    const scoreError = document.getElementById("student-score-error");
-
-    nameError.textContent = "";
-    scoreError.textContent = "";
-
-    const result = validateStudent(
-      els.name.value,
-      els.score.value
-    );
-
-    if (!result.valid) {
-
-      nameError.textContent = result.errors.name || "";
-      scoreError.textContent = result.errors.score || "";
- return;
-    }
-
-    addStudent(
-      els.name.value,
-      els.score.value
-    );
-
-    els.form.reset();
-    els.name.focus();
-  });
-
-
-  els.list.addEventListener("click", function(event) {
-
-    if (event.target.tagName === "BUTTON") {
-
-      const id = event.target.dataset.studentId;
-
-      removeStudent(id);
-    }
-  });
- renderStudents();
-  renderStats();
+  
 }
 
 
