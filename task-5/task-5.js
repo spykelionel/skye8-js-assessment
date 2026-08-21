@@ -138,21 +138,76 @@ function calcRevenue(records) {
 
 // TODO [T5-06]: Calculate total units sold from a set of records.
 function calcUnits(records) {
-  return 0;
+  return records.reduce(function (total, record) {
+    return total + record.quantity;
+  }, 0);
 }
 
 // TODO [T5-07]: Find the best-selling product by total units across
 // the provided records. Return the product name, or a dash if the
 // set is empty.
 function findTopProduct(records) {
-  return "-";
+  if (records.length === 0) {
+    return "-";
+  }
+
+  // Count total units for each product
+  var unitsByProduct = {};
+
+  records.forEach(function (record) {
+    var name = record.product;
+    if (!unitsByProduct[name]) {
+      unitsByProduct[name] = 0;
+    }
+    unitsByProduct[name] += record.quantity;
+  });
+
+  // Find the product with the highest unit count
+  var topName = "-";
+  var maxUnits = -1;
+
+  for (var name in unitsByProduct) {
+    if (unitsByProduct[name] > maxUnits) {
+      maxUnits = unitsByProduct[name];
+      topName = name;
+    }
+  }
+
+  return topName;
 }
 
 // TODO [T5-08]: Find the best-selling category by total revenue
 // across the provided records. Return the category name, or a dash
 // if the set is empty.
 function findTopCategory(records) {
-  return "-";
+  if (records.length === 0) {
+    return "-";
+  }
+
+  // Sum revenue for each category
+  var revenueByCategory = {};
+
+  records.forEach(function (record) {
+    var cat = record.category;
+    var revenue = record.quantity * record.price;
+    if (!revenueByCategory[cat]) {
+      revenueByCategory[cat] = 0;
+    }
+    revenueByCategory[cat] += revenue;
+  });
+
+  // Find the category with the highest revenue
+  var topCat = "-";
+  var maxRev = -1;
+
+  for (var cat in revenueByCategory) {
+    if (revenueByCategory[cat] > maxRev) {
+      maxRev = revenueByCategory[cat];
+      topCat = cat;
+    }
+  }
+
+  return topCat;
 }
 
 // TODO [T5-09]: Update all six KPI elements from the visible set.
