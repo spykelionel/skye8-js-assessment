@@ -26,7 +26,9 @@ var els = {
 // TODO [T4-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(products, term) {
-  return products;
+  if (!term.trim()) return products;
+  var lower = term.toLowerCase();
+  return products.filter((p) => p.name.toLowerCase().includes(lower));
 }
 
 // TODO [T4-02]: Filter the dataset by category and by price band.
