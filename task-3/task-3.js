@@ -35,8 +35,6 @@ var currentFilter = "all";
 // Parse with JSON.parse inside a try/catch. Corrupt or absent data
 // must produce an empty array, never a thrown error.
 function loadState() {
-  return [];
-  function loadState() {
   try {
     var stored = localStorage.getItem(STORAGE_KEY);
 
@@ -55,30 +53,16 @@ function loadState() {
     return [];
   }
 }
-}
 
 // TODO [T3-02]: Save the current todos array to localStorage under
 // STORAGE_KEY using JSON.stringify.
-
- function validateTodo(text) {
-  if (typeof text !== "string" || text.trim() === "") {
-    return {
-      valid: false,
-      error: "Task cannot be empty."
-    };
-  }
-
-  return {
-    valid: true,
-    error: ""
-  };
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
 }
 
 // TODO [T3-03]: Validate the submitted text. Reject empty strings and
 // whitespace-only strings.
 function validateTodo(text) {
-  return { valid: false, error: "" };
-  
   if (typeof text !== "string" || text.trim() === "") {
     return {
       valid: false,
@@ -91,7 +75,6 @@ function validateTodo(text) {
     error: ""
   };
 }
-
 
 // TODO [T3-04]: Add a new task to state, save, and re-render.
 function addTodo(text) {
@@ -245,6 +228,82 @@ function init() {
   // TODO [T3-10]: Load state, bind the form submit, bind filter
   // buttons, bind toggle and delete delegation, then perform the
   // first render.
+
+  todos = loadState();
+
+  els.form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    var result = addTodo(els.input.value);
+
+    if (result.valid) {
+      els.input.value = "";
+      els.input.focus();
+    }
+  });
+
+  els.filterAll.addEventListener("click", function () {
+    currentFilter = "all";
+
+    els.filterAll.setAttribute("aria-pressed", "true");
+    els.filterPending.setAttribute("aria-pressed", "false");
+    els.filterCompleted.setAttribute("aria-pressed", "false");
+
+    renderTodos();
+    renderStats();
+  });
+
+  els.filterPending.addEventListener("click", function () {
+    currentFilter = "pending";
+
+    els.filterAll.setAttribute("aria-pressed", "false");
+    els.filterPending.setAttribute("aria-pressed", "true");
+    els.filterCompleted.setAttribute("aria-pressed", "false");
+
+    renderTodos();
+    renderStats();
+  });
+
+  els.filterCompleted.addEventListener("click", function () {
+    currentFilter = "completed";
+
+    els.filterAll.setAttribute("aria-pressed", "false");
+    els.filterPending.setAttribute("aria-pressed", "false");
+    els.filterCompleted.setAttribute("aria-pressed", "true");
+
+    renderTodos();
+    renderStats();
+  });
+
+  els.list.addEventListener("click", function (event) {
+    var button = event.target.closest("button");
+
+    if (!button) {
+      return;
+    }
+
+    var id = button.dataset.id;
+    var action = button.dataset.action;
+
+    if (!id || !action) {
+      return;
+    }
+
+    if (action === "toggle") {
+      toggleTodo(id);
+    }
+
+    if (action === "delete") {
+      removeTodo(id);
+    }
+  });
+
+  els.filterAll.setAttribute("aria-pressed", "true");
+  els.filterPending.setAttribute("aria-pressed", "false");
+  els.filterCompleted.setAttribute("aria-pressed", "false");
+
+  renderTodos();
+  renderStats();
 }
 
 document.addEventListener("DOMContentLoaded", init);
