@@ -213,12 +213,66 @@ function findTopCategory(records) {
 // TODO [T5-09]: Update all six KPI elements from the visible set.
 // KPIs must recalculate against the filtered set, not the full
 // dataset. Safe values when nothing matches: no NaN, no Infinity.
-function renderKPIs(records) {}
+function renderKPIs(records) {
+  var revenue = calcRevenue(records);
+  var orders  = records.length;          // each record = one order line
+  var units   = calcUnits(records);
+  var aov     = orders > 0 ? revenue / orders : 0;  // avoid division by zero
 
-// TODO [T5-10]: Build the table rows from the visible set. Clear
+  // Update the DOM – always show safe numbers
+  els.kpiRevenue.textContent     = formatMoney(revenue);
+  els.kpiOrders.textContent      = orders.toLocaleString();
+  els.kpiUnits.textContent       = units.toLocaleString();
+  els.kpiAov.textContent         = formatMoney(aov);
+  els.kpiTopProduct.textContent  = findTopProduct(records);
+  els.kpiTopCategory.textContent = findTopCategory(records);
+}
+
+/// TODO [T5-10]: Build the table rows from the visible set. Clear
 // the table body first. No innerHTML concatenation of unescaped
 // user input.
-function renderTable(records) {}
+function renderTable(records) {
+  // Clear previous rows
+  els.tableBody.innerHTML = "";
+
+  // Show / hide the empty-state message
+  if (records.length === 0) {
+    els.empty.hidden = false;
+    return;
+  }
+  els.empty.hidden = true;
+
+  // Create a new row for every visible record
+  records.forEach(function (record) {
+    var tr = document.createElement("tr");
+
+    // Helper that creates a safe <td>
+    function td(text) {
+      var cell = document.createElement("td");
+      cell.textContent = text;   // textContent is safe – no HTML injection
+      return cell;
+    }
+
+    tr.appendChild(td(record.product));
+    tr.appendChild(td(record.category));
+    tr.appendChild(td(record.quantity));
+    tr.appendChild(td(formatMoney(record.price)));
+    tr.appendChild(td(formatMoney(record.quantity * record.price)));
+
+    // If your HTML table has extra columns (date, id …) add them here
+    // the same safe way:
+    // tr.appendChild(td(record.date || ""));
+
+    els.tableBody.appendChild(tr);
+  });
+}
+
+// Master render function – called whenever any control changes
+function render() {
+  var visible = getVisible();
+  renderKPIs(visible);
+  renderTable(visible);
+}
 
 function init() {
   // TODO [T5-11]: Populate the category dropdown from the dataset,
