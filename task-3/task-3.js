@@ -166,9 +166,48 @@ function renderTodos() {
     els.list.appendChild(li);
   });
 }
-// TODO [T3-09]: Update the counters and toggle the empty state.
+// [T3-09]: Update the counters and toggle the empty state.
 // All counters must be derived from the array, never incremented.
-function renderStats() {}
+function renderStats() {
+  var total = todos.length;
+  var completed = todos.filter(function (t) {
+    return t.completed;
+  }).length;
+  var pending = total - completed;
+
+  els.statTotal.textContent = String(total);
+  els.statCompleted.textContent = String(completed);
+  els.statPending.textContent = String(pending);
+
+  var filteredTodos = getFilteredTodos();
+  var isEmpty = filteredTodos.length === 0;
+
+  if (els.empty) {
+    els.empty.style.display = isEmpty ? "block" : "none";
+    els.empty.hidden = !isEmpty;
+  }
+}
+
+// Sets active state on the active filter button and aria-pressed attributes
+function setFilter(filter) {
+  currentFilter = filter;
+
+  var filterMap = [
+    { btn: els.filterAll, name: "all" },
+    { btn: els.filterPending, name: "pending" },
+    { btn: els.filterCompleted, name: "completed" },
+  ];
+
+  filterMap.forEach(function (item) {
+    if (item.btn) {
+      var isActive = item.name === currentFilter;
+      item.btn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    }
+  });
+
+  renderTodos();
+  renderStats();
+}
 
 function init() {
   // TODO [T3-10]: Load state, bind the form submit, bind filter
