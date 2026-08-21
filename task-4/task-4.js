@@ -64,18 +64,40 @@ function applyFilters(products, category, priceBand) {
   return result;
 }
 
-// TODO [T4-03]: Sort a copy of the array by price ascending or
+// [T4-03]: Sort a copy of the array by price ascending or
 // descending. An empty sort value returns the array unchanged.
 // Never mutate the input array.
 function applySort(products, sortValue) {
-  return products;
-}
+  var sortedCopy = products.slice();
 
-// TODO [T4-04]: Compose search, filter and sort into a single
+  if (sortValue === "price-asc") {
+    sortedCopy.sort(function (a, b) {
+      return a.price - b.price;
+    });
+  } else if (sortValue === "price-desc") {
+    sortedCopy.sort(function (a, b) {
+      return b.price - a.price;
+    });
+  }
+
+  return sortedCopy;
+}
+// [T4-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the
 // filtered, sorted array.
 function getVisible() {
-  return [];
+  var rawDataset = typeof PRODUCTS !== "undefined" ? PRODUCTS : [];
+  var term = els.search ? els.search.value : "";
+  var category = els.category ? els.category.value : "";
+  var priceBand = els.price ? els.price.value : "";
+  var sortValue = els.sort ? els.sort.value : "";
+
+  // Pipeline Execution
+  var searched = applySearch(rawDataset, term);
+  var filtered = applyFilters(searched, category, priceBand);
+  var sorted = applySort(filtered, sortValue);
+
+  return sorted;
 }
 
 // TODO [T4-05]: Render a single product card. Return a DOM element.
