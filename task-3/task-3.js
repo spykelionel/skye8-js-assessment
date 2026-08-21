@@ -142,22 +142,104 @@ function toggleTodo(id) {
 }
 
 // TODO [T3-06]: Remove a task by id, save, and re-render.
-function removeTodo(id) {}
+function removeTodo(id) {
+  todos = todos.filter(function (todo) {
+    return todo.id !== id;
+  });
+
+  saveState();
+  renderTodos();
+  renderStats();
+}
 
 // TODO [T3-07]: Return the todos that match the current filter.
 // "all" returns everything, "pending" returns incomplete tasks,
 // "completed" returns completed tasks. Filtering must not delete data.
 function getFilteredTodos() {
-  return [];
+  if (currentFilter === "pending") {
+    return todos.filter(function (todo) {
+      return !todo.completed;
+    });
+  }
+
+  if (currentFilter === "completed") {
+    return todos.filter(function (todo) {
+      return todo.completed;
+    });
+  }
+
+  return todos;
 }
 
 // TODO [T3-08]: Build the task list from the filtered state. Clear it
 // first. No innerHTML concatenation of unescaped user input.
-function renderTodos() {}
+function renderTodos() {
+  els.list.replaceChildren();
+
+  var filteredTodos = getFilteredTodos();
+
+  filteredTodos.forEach(function (todo) {
+    var item = document.createElement("li");
+    item.className = "todo-item";
+    item.dataset.id = todo.id;
+
+    if (todo.completed) {
+      item.classList.add("completed");
+    }
+
+    var text = document.createElement("span");
+    text.className = "todo-text";
+    text.textContent = todo.text;
+
+    var toggleButton = document.createElement("button");
+    toggleButton.type = "button";
+    toggleButton.className = "todo-toggle";
+    toggleButton.dataset.action = "toggle";
+    toggleButton.dataset.id = todo.id;
+    toggleButton.textContent = todo.completed
+      ? "Mark Pending"
+      : "Complete";
+
+    var deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "todo-delete";
+    deleteButton.dataset.action = "delete";
+    deleteButton.dataset.id = todo.id;
+    deleteButton.textContent = "Delete";
+
+    item.appendChild(text);
+    item.appendChild(toggleButton);
+    item.appendChild(deleteButton);
+
+    els.list.appendChild(item);
+  });
+}
 
 // TODO [T3-09]: Update the counters and toggle the empty state.
 // All counters must be derived from the array, never incremented.
-function renderStats() {}
+function renderStats() {
+  var total = todos.length;
+
+  var completed = todos.filter(function (todo) {
+    return todo.completed;
+  }).length;
+
+  var pending = todos.filter(function (todo) {
+    return !todo.completed;
+  }).length;
+
+  els.statTotal.textContent = total;
+  els.statCompleted.textContent = completed;
+  els.statPending.textContent = pending;
+
+  var filteredTodos = getFilteredTodos();
+
+  if (filteredTodos.length === 0) {
+    els.empty.hidden = false;
+  } else {
+    els.empty.hidden = true;
+  }
+}
 
 function init() {
   // TODO [T3-10]: Load state, bind the form submit, bind filter
