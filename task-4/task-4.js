@@ -23,7 +23,7 @@ var els = {
   empty: document.getElementById("product-empty"),
 };
 
-// TODO [T4-01]: Filter the dataset by search term. Case insensitive,
+// [T4-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(products, term) {
   if (!term || typeof term !== "string") {
@@ -37,6 +37,7 @@ function applySearch(products, term) {
   return products.filter(function (product) {
     return product.name.toLowerCase().indexOf(cleanTerm) !== -1;
   });
+}
 
 // [T4-02]: Filter the dataset by category and by price band.
 // Return a new array. An empty category or price value means "all".
@@ -82,6 +83,7 @@ function applySort(products, sortValue) {
 
   return sortedCopy;
 }
+
 // [T4-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the
 // filtered, sorted array.
@@ -140,6 +142,7 @@ function createProductCard(product) {
 
   return card;
 }
+
 // [T4-06]: Render the product grid from the visible set.
 // Clear it first.
 function renderProducts(products) {
@@ -179,9 +182,25 @@ function updateUI() {
   renderCount(visibleProducts.length);
   renderEmptyState(visibleProducts.length);
 }
+
+// [T4-09]: Bind search, filter and sort controls, then
+// perform the first render.
 function init() {
-  // TODO [T4-09]: Bind search, filter and sort controls, then
-  // perform the first render.
+  if (els.search) {
+    els.search.addEventListener("input", updateUI);
+  }
+  if (els.category) {
+    els.category.addEventListener("change", updateUI);
+  }
+  if (els.price) {
+    els.price.addEventListener("change", updateUI);
+  }
+  if (els.sort) {
+    els.sort.addEventListener("change", updateUI);
+  }
+
+  // Initial render
+  updateUI();
 }
 
 document.addEventListener("DOMContentLoaded", init);
