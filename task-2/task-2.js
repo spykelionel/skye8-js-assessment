@@ -105,7 +105,39 @@ function removeStudent(id) {
 // Return average (one decimal), highest, lowest and count. With zero
 // students every stat must be a dash, never NaN.
 function calculateStats() {
+ if (students.length === 0) {
+    return {
+      average: "-",
+      highest: "-",
+      lowest: "-",
+      count: 0
+    };
+  }
 
+  let total = 0;
+  let highest = students[0].score;
+  let lowest = students[0].score;
+
+  students.forEach(function(student) {
+
+    total = total + student.score;
+
+    if (student.score > highest) {
+      highest = student.score;
+    }
+
+    if (student.score < lowest) {
+      lowest = student.score;
+    }
+  });
+   const average = total / students.length;
+
+  return {
+    average: average.toFixed(1),
+    highest: highest,
+    lowest: lowest,
+    count: students.length
+  };
 }
 
 
