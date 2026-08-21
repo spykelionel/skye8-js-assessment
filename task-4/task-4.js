@@ -100,13 +100,46 @@ function getVisible() {
   return sorted;
 }
 
-// TODO [T4-05]: Render a single product card. Return a DOM element.
+// [T4-05]: Render a single product card. Return a DOM element.
 // No innerHTML concatenation of unescaped user input.
 function createProductCard(product) {
   var card = document.createElement("article");
+  card.className = "card product-card";
+  card.dataset.id = product.id;
+
+  var badge = document.createElement("span");
+  badge.className = "product-card__badge " + (product.inStock ? "badge--success" : "badge--warning");
+  badge.textContent = product.inStock ? "In Stock" : "Out of Stock";
+
+  var category = document.createElement("span");
+  category.className = "product-card__category";
+  category.textContent = product.category;
+
+  var title = document.createElement("h3");
+  title.className = "product-card__title";
+  title.textContent = product.name;
+
+  var meta = document.createElement("div");
+  meta.className = "product-card__meta";
+
+  var price = document.createElement("span");
+  price.className = "product-card__price";
+  price.textContent = product.price.toLocaleString("en-US") + " XAF";
+
+  var rating = document.createElement("span");
+  rating.className = "product-card__rating";
+  rating.textContent = "★ " + product.rating.toFixed(1);
+
+  meta.appendChild(price);
+  meta.appendChild(rating);
+
+  card.appendChild(badge);
+  card.appendChild(category);
+  card.appendChild(title);
+  card.appendChild(meta);
+
   return card;
 }
-
 // TODO [T4-06]: Render the product grid from the visible set.
 // Clear it first.
 function renderProducts(products) {}
