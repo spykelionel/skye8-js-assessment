@@ -274,10 +274,40 @@ function render() {
   renderTable(visible);
 }
 
+// TODO [T5-11]: Populate the category dropdown from the dataset,
+// bind search, filter and sort controls, then perform the first
+// render.
 function init() {
-  // TODO [T5-11]: Populate the category dropdown from the dataset,
-  // bind search, filter and sort controls, then perform the first
-  // render.
+  // 1. Build unique category list for the dropdown
+  var categories = [];
+  SALES.forEach(function (record) {
+    if (categories.indexOf(record.category) === -1) {
+      categories.push(record.category);
+    }
+  });
+  categories.sort(); // nice alphabetical order
+
+  // Add the default "All" option first
+  var allOption = document.createElement("option");
+  allOption.value = "";
+  allOption.textContent = "All Categories";
+  els.category.appendChild(allOption);
+
+  // Add each unique category
+  categories.forEach(function (cat) {
+    var option = document.createElement("option");
+    option.value = cat;
+    option.textContent = cat;
+    els.category.appendChild(option);
+  });
+
+  // 2. Wire up the three controls so they all call render()
+  els.search.addEventListener("input", render);   // live search while typing
+  els.category.addEventListener("change", render);
+  els.sort.addEventListener("change", render);
+
+  // 3. First paint
+  render();
 }
 
 document.addEventListener("DOMContentLoaded", init);
