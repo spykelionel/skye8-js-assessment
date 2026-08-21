@@ -20,6 +20,8 @@ const els = {
   lowest: document.getElementById("stat-lowest"),
   count: document.getElementById("stat-count"),
   empty: document.getElementById("student-empty"),
+  nameError: document.getElementById("student-name-error"),
+  scoreError: document.getElementById("student-score-error"),
 };
 
 /** @type {{ id: string, name: string, score: number, grade: string }[]} */
