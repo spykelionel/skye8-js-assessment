@@ -141,10 +141,7 @@ function renderEmptyState(count) {
   }
 }
 
-function init() {
-  // TODO [T4-09]: Bind search, filter and sort controls, then
-  // perform the first render.
-
+function update() {
   var visible = getVisible();
   renderProducts(visible);
   renderCount(visible.length);
