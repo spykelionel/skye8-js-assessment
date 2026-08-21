@@ -38,10 +38,30 @@ function applySearch(products, term) {
     return product.name.toLowerCase().indexOf(cleanTerm) !== -1;
   });
 
-// TODO [T4-02]: Filter the dataset by category and by price band.
+// [T4-02]: Filter the dataset by category and by price band.
 // Return a new array. An empty category or price value means "all".
 function applyFilters(products, category, priceBand) {
-  return products;
+  var result = products.slice();
+
+  // Apply Category Filter
+  if (category && category.trim() !== "") {
+    result = result.filter(function (product) {
+      return product.category === category;
+    });
+  }
+
+  // Apply Price Band Filter
+  if (priceBand && priceBand.trim() !== "") {
+    var parts = priceBand.split("-");
+    var min = parseFloat(parts[0]) || 0;
+    var max = parts[1] !== "" && parts[1] !== undefined ? parseFloat(parts[1]) : Infinity;
+
+    result = result.filter(function (product) {
+      return product.price >= min && product.price <= max;
+    });
+  }
+
+  return result;
 }
 
 // TODO [T4-03]: Sort a copy of the array by price ascending or
