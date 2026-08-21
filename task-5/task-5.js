@@ -30,33 +30,77 @@ var els = {
 // TODO [T5-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(records, term) {
-  return records;
+  if (!term || term.trim() === "") {
+    return records.slice();
+  }
+  var lower = term.trim().toLowerCase();
+  return records.filter(function (r) {
+    return r.product.toLowerCase().indexOf(lower) !== -1;
+  });
 }
 
 // TODO [T5-02]: Filter the dataset by category. An empty value means
 // "all". Return a new array.
 function applyFilters(records, category) {
-  return records;
+  if (!category) {
+    return records.slice();
+  }
+  return records.filter(function (r) {
+    return r.category === category;
+  });
 }
 
 // TODO [T5-03]: Sort a copy of the array by the selected criterion.
 // An empty sort value returns the array unchanged. Never mutate the
 // input array.
 function applySort(records, sortValue) {
-  return records;
+  var copy = records.slice();
+  if (sortValue === "revenue-desc") {
+    copy.sort(function (a, b) {
+      return b.quantity * b.price - a.quantity * a.price;
+    });
+  } else if (sortValue === "revenue-asc") {
+    copy.sort(function (a, b) {
+      return a.quantity * a.price - b.quantity * b.price;
+    });
+  } else if (sortValue === "date-desc") {
+    copy.sort(function (a, b) {
+      return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+    });
+  } else if (sortValue === "date-asc") {
+    copy.sort(function (a, b) {
+      return a.date > b.date ? 1 : a.date < b.date ? -1 : 0;
+    });
+  } else if (sortValue === "quantity-desc") {
+    copy.sort(function (a, b) {
+      return b.quantity - a.quantity;
+    });
+    }
+  return copy;
 }
 
 // TODO [T5-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the filtered,
 // sorted array.
 function getVisible() {
-  return [];
+  var term = els.search.value;
+  var category = els.category.value;
+  var sortValue = els.sort.value;
+
+  var result = applySearch(SALES, term);
+  result = applyFilters(result, category);
+  result = applySort(result, sortValue);
+  return result;
 }
 
 // TODO [T5-05]: Calculate total revenue from a set of records.
 // Revenue for a record is quantity * price.
 function calcRevenue(records) {
-  return 0;
+  var total = 0;
+  for (var i = 0; i < records.length; i++) {
+    total = total + records[i].quantity * records[i].price;
+  }
+  return total;
 }
 
 // TODO [T5-06]: Calculate total units sold from a set of records.
