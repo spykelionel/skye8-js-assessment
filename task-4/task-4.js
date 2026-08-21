@@ -140,16 +140,45 @@ function createProductCard(product) {
 
   return card;
 }
-// TODO [T4-06]: Render the product grid from the visible set.
+// [T4-06]: Render the product grid from the visible set.
 // Clear it first.
-function renderProducts(products) {}
+function renderProducts(products) {
+  if (!els.grid) return;
+  els.grid.innerHTML = "";
 
-// TODO [T4-07]: Update the visible count display.
-function renderCount(count) {}
+  products.forEach(function (product) {
+    var card = createProductCard(product);
+    els.grid.appendChild(card);
+  });
+}
 
-// TODO [T4-08]: Toggle the empty state based on visible products.
-function renderEmptyState(count) {}
+// [T4-07]: Update the visible count display.
+function renderCount(count) {
+  if (els.count) {
+    els.count.textContent = String(count);
+  }
+}
 
+// [T4-08]: Toggle the empty state based on visible products.
+function renderEmptyState(count) {
+  var isEmpty = count === 0;
+
+  if (els.empty) {
+    els.empty.style.display = isEmpty ? "block" : "none";
+    els.empty.hidden = !isEmpty;
+  }
+  if (els.grid) {
+    els.grid.style.display = isEmpty ? "none" : "grid";
+  }
+}
+
+// Central UI update executor
+function updateUI() {
+  var visibleProducts = getVisible();
+  renderProducts(visibleProducts);
+  renderCount(visibleProducts.length);
+  renderEmptyState(visibleProducts.length);
+}
 function init() {
   // TODO [T4-09]: Bind search, filter and sort controls, then
   // perform the first render.
