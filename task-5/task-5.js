@@ -163,7 +163,31 @@ function findTopProduct(records) {
 // across the provided records. Return the category name, or a dash
 // if the set is empty.
 function findTopCategory(records) {
-  return "-";
+  if (records.length === 0) {
+    return "-";
+  }
+
+  var categoryRevenue = {};
+
+  records.forEach(function (record) {
+    if (!categoryRevenue[record.category]) {
+      categoryRevenue[record.category] = 0;
+    }
+
+    categoryRevenue[record.category] += record.quantity * record.price;
+  });
+
+  var topCategory = "-";
+  var highestRevenue = 0;
+
+  Object.keys(categoryRevenue).forEach(function (category) {
+    if (categoryRevenue[category] > highestRevenue) {
+      highestRevenue = categoryRevenue[category];
+      topCategory = category;
+    }
+  });
+
+  return topCategory;
 }
 
 // TODO [T5-09]: Update all six KPI elements from the visible set.
