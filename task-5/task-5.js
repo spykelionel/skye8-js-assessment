@@ -115,13 +115,25 @@ function applySort(records, sortValue) {
 // pipeline. Read the current control values and return the filtered,
 // sorted array.
 function getVisible() {
-  return [];
+  var term = els.search.value;
+  var category = els.category.value;
+  var sortValue = els.sort.value;
+
+  // Pipeline: start with full data → search → filter → sort
+  var result = SALES;                 // original data (never mutate)
+  result = applySearch(result, term);
+  result = applyFilters(result, category);
+  result = applySort(result, sortValue);
+
+  return result;
 }
 
-// TODO [T5-05]: Calculate total revenue from a set of records.
+/// TODO [T5-05]: Calculate total revenue from a set of records.
 // Revenue for a record is quantity * price.
 function calcRevenue(records) {
-  return 0;
+  return records.reduce(function (total, record) {
+    return total + (record.quantity * record.price);
+  }, 0);cffvt5g
 }
 
 // TODO [T5-06]: Calculate total units sold from a set of records.
