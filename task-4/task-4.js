@@ -26,13 +26,44 @@ var els = {
 // TODO [T4-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(products, term) {
-  return products;
+  var searchTerm = term.trim().toLowerCase();
+
+  if (searchTerm === "") {
+    return products.slice();
+  }
+
+  return products.filter(function (product) {
+    return product.name.toLowerCase().includes(searchTerm);
+  });
 }
 
 // TODO [T4-02]: Filter the dataset by category and by price band.
 // Return a new array. An empty category or price value means "all".
 function applyFilters(products, category, priceBand) {
-  return products;
+  return products.filter(function (product) {
+    var categoryMatches =
+      category === "" || product.category === category;
+
+    var priceMatches = true;
+
+    if (priceBand === "0-50000") {
+      priceMatches = product.price < 50000;
+    }
+
+    if (priceBand === "50000-150000") {
+      priceMatches = product.price >= 50000 && product.price <= 150000;
+    }
+
+    if (priceBand === "150000-500000") {
+      priceMatches = product.price >= 150000 && product.price <= 500000;
+    }
+
+    if (priceBand === "500000-") {
+      priceMatches = product.price > 500000;
+    }
+
+    return categoryMatches && priceMatches;
+  });
 }
 
 // TODO [T4-03]: Sort a copy of the array by price ascending or
