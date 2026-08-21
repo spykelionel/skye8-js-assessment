@@ -117,9 +117,10 @@ function getVisible() {
 // TODO [T5-05]: Calculate total revenue from a set of records.
 // Revenue for a record is quantity * price.
 function calcRevenue(records) {
-  return 0;
+  return records.reduce(function (total, record) {
+    return total + (record.quantity * record.price);
+  }, 0);
 }
-
 // TODO [T5-06]: Calculate total units sold from a set of records.
 function calcUnits(records) {
   return 0;
