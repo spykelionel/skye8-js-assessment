@@ -44,9 +44,10 @@ function applySearch(records, term) {
 // TODO [T5-02]: Filter the dataset by category. An empty value means
 // "all". Return a new array.
 function applyFilters(records, category) {
-  return records;
+  return records.filter(function (record) {
+    return category === "" || record.category === category;
+  });
 }
-
 // TODO [T5-03]: Sort a copy of the array by the selected criterion.
 // An empty sort value returns the array unchanged. Never mutate the
 // input array.
