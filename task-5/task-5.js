@@ -30,7 +30,15 @@ var els = {
 // TODO [T5-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(records, term) {
-  return records;
+  var searchTerm = term.trim().toLowerCase();
+
+  if (searchTerm === "") {
+    return records.slice();
+  }
+
+  return records.filter(function (record) {
+    return record.product.toLowerCase().includes(searchTerm);
+  });
 }
 
 // TODO [T5-02]: Filter the dataset by category. An empty value means
