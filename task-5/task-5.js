@@ -27,10 +27,28 @@ var els = {
   empty: document.getElementById("sales-empty"),
 };
 
+// Helper: format money nicely (e.g. $1,234.56)
+function formatMoney(value) {
+  return "$" + Number(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
 // TODO [T5-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(records, term) {
-  return records;
+  // If the search box is empty, just return everything
+  if (!term || term.trim() === "") {
+    return records.slice(); // return a copy
+  }
+
+  var searchTerm = term.trim().toLowerCase();
+
+  // Keep only records whose product name contains the search term
+  return records.filter(function (record) {
+    return record.product.toLowerCase().includes(searchTerm);
+  });
 }
 
 // TODO [T5-02]: Filter the dataset by category. An empty value means
