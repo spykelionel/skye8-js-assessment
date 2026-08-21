@@ -96,7 +96,22 @@ function applySort(records, sortValue) {
 // pipeline. Read the current control values and return the filtered,
 // sorted array.
 function getVisible() {
-  return [];
+  var records = applySearch(
+    SALES,
+    els.search.value
+  );
+
+  records = applyFilters(
+    records,
+    els.category.value
+  );
+
+  records = applySort(
+    records,
+    els.sort.value
+  );
+
+  return records;
 }
 
 // TODO [T5-05]: Calculate total revenue from a set of records.
