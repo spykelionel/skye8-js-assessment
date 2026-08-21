@@ -35,25 +35,59 @@ var currentFilter = "all";
 // Parse with JSON.parse inside a try/catch. Corrupt or absent data
 // must produce an empty array, never a thrown error.
 function loadState() {
-  return [];
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (raw === null || raw === undefined) {
+      return [];
+    }
+    var parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed;
+  } catch (e) {
+    return [];
+  }
 }
 
 // TODO [T3-02]: Save the current todos array to localStorage under
 // STORAGE_KEY using JSON.stringify.
-function saveState() {}
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+}
 
 // TODO [T3-03]: Validate the submitted text. Reject empty strings and
 // whitespace-only strings.
 function validateTodo(text) {
-  return { valid: false, error: "" };
+  if (typeof text !== "string" || text.trim() === "") {
+    return { valid: false, error: "Task description is required." };
+  }
+  return { valid: true, error: "" };
 }
 
 // TODO [T3-04]: Add a new task to state, save, and re-render.
-function addTodo(text) {}
+function addTodo(text) {
+  var todo = {
+    id: crypto.randomUUID(),
+    text: text.trim(),
+    completed: false,
+    createdAt: new Date().toISOString(),
+  };
+  todos.push(todo);
+  saveState();
+  renderTodos();
+  renderStats();
+}
 
 // TODO [T3-05]: Toggle the completed status of a task by id, save,
 // and re-render.
-function toggleTodo(id) {}
+function toggleTodo(id) {
+  for (var i = 0; i < todos.length; i++) {
+    if (todos[i].id === id) {
+      todos[i].completed = !todos[i].completed;
+      break;
+    }
+}
 
 // TODO [T3-06]: Remove a task by id, save, and re-render.
 function removeTodo(id) {}
