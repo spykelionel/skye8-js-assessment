@@ -210,9 +210,99 @@ function setFilter(filter) {
 }
 
 function init() {
-  // TODO [T3-10]: Load state, bind the form submit, bind filter
+  // [T3-10]: Load state, bind the form submit, bind filter
   // buttons, bind toggle and delete delegation, then perform the
   // first render.
+
+  // 1. Load persisted data
+  todos = loadState();
+
+  // 2. Bind form submit
+  if (els.form) {
+    els.form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var text = els.input ? els.input.value : "";
+      var validation = validateTodo(text);
+
+      if (!validation.valid) {
+        if (els.inputError) {
+          els.inputError.textContent = validation.error;
+        }
+        return;
+      }
+
+      if (els.inputError) {
+        els.inputError.textContent = "";
+      }
+
+      addTodo(text);
+
+      if (els.input) {
+        els.input.value = "";
+        els.input.focus();
+      }
+    });
+  }
+
+  // Clear input error on user typing
+  if (els.input) {
+    els.input.addEventListener("input", function () {
+      if (els.inputError) {
+        els.inputError.textContent = "";
+      }
+    });
+  }
+
+  // 3. Bind filter buttons
+  if (els.filterAll) {
+    els.filterAll.addEventListener("click", function () {
+      setFilter("all");
+    });
+  }
+  if (els.filterPending) {
+    els.filterPending.addEventListener("click", function () {
+      setFilter("pending");
+    });
+  }
+  if (els.filterCompleted) {
+    els.filterCompleted.addEventListener("click", function () {
+      setFilter("completed");
+    });
+  }
+
+  // 4. Event delegation on list container for toggle and delete actions
+  if (els.list) {
+    els.list.addEventListener("click", function (e) {
+      var target = e.target;
+      var action = target.dataset.action;
+      var id = target.dataset.id;
+
+      if (!id) {
+        var parentItem = target.closest("li");
+        if (parentItem) {
+          id = parentItem.dataset.id;
+        }
+      }
+
+      if (action === "toggle") {
+        toggleTodo(id);
+      } else if (action === "delete") {
+        removeTodo(id);
+      }
+    });
+
+    els.list.addEventListener("change", function (e) {
+      if (e.target.dataset.action === "toggle") {
+        var id = e.target.dataset.id;
+        toggleTodo(id);
+      }
+    });
+  }
+
+  // 5. Initial render
+  renderTodos();
+  renderStats();
 }
 
 document.addEventListener("DOMContentLoaded", init);
