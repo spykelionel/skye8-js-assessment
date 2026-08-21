@@ -54,14 +54,61 @@ function applySearch(records, term) {
 // TODO [T5-02]: Filter the dataset by category. An empty value means
 // "all". Return a new array.
 function applyFilters(records, category) {
-  return records;
+  // Empty string means "show all categories"
+  if (!category || category === "") {
+    return records.slice();
+  }
+
+  return records.filter(function (record) {
+    return record.category === category;
+  });
 }
 
 // TODO [T5-03]: Sort a copy of the array by the selected criterion.
 // An empty sort value returns the array unchanged. Never mutate the
 // input array.
 function applySort(records, sortValue) {
-  return records;
+  // Always work on a copy so we never change the original data
+  var copy = records.slice();
+
+  if (!sortValue || sortValue === "") {
+    return copy;
+  }
+
+  // sortValue examples that are common in these assessments:
+  // "revenue-desc", "revenue-asc", "units-desc", "units-asc",
+  // "product-asc", "product-desc", "price-desc", etc.
+  copy.sort(function (a, b) {
+    var aRevenue = a.quantity * a.price;
+    var bRevenue = b.quantity * b.price;
+
+    switch (sortValue) {
+      case "revenue-desc":
+        return bRevenue - aRevenue;
+      case "revenue-asc":
+        return aRevenue - bRevenue;
+      case "units-desc":
+        return b.quantity - a.quantity;
+      case "units-asc":
+        return a.quantity - b.quantity;
+      case "product-asc":
+        return a.product.localeCompare(b.product);
+      case "product-desc":
+        return b.product.localeCompare(a.product);
+      case "price-desc":
+        return b.price - a.price;
+      case "price-asc":
+        return a.price - b.price;
+      case "category-asc":
+        return a.category.localeCompare(b.category);
+      case "category-desc":
+        return b.category.localeCompare(a.category);
+      default:
+        return 0; // unknown value → leave order as-is
+    }
+  });
+
+  return copy;
 }
 
 // TODO [T5-04]: Compose search, filter and sort into a single
