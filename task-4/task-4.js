@@ -89,7 +89,14 @@ function createProductCard(product) {
 
 // TODO [T4-06]: Render the product grid from the visible set.
 // Clear it first.
-function renderProducts(products) {}
+function renderProducts(products) {
+  els.grid.replaceChildren();
+
+  products.forEach(function (product) {
+    var card = createProductCard(product);
+    els.grid.appendChild(card);
+  });
+}
 
 // TODO [T4-07]: Update the visible count display.
 function renderCount(count) {}
