@@ -125,10 +125,47 @@ function getFilteredTodos() {
 }
 
 
-// TODO [T3-08]: Build the task list from the filtered state. Clear it
+/// [T3-08]: Build the task list from the filtered state. Clear it
 // first. No innerHTML concatenation of unescaped user input.
-function renderTodos() {}
+function renderTodos() {
+  els.list.innerHTML = "";
+  var filtered = getFilteredTodos();
 
+  filtered.forEach(function (todo) {
+    var li = document.createElement("li");
+    li.className = "todo-item" + (todo.completed ? " todo-item--completed" : "");
+    li.dataset.id = todo.id;
+
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "todo-item__checkbox";
+    checkbox.checked = todo.completed;
+    checkbox.dataset.action = "toggle";
+    checkbox.dataset.id = todo.id;
+    checkbox.setAttribute(
+      "aria-label",
+      'Mark "' + todo.text + '" as ' + (todo.completed ? "pending" : "completed")
+    );
+
+    var textSpan = document.createElement("span");
+    textSpan.className = "todo-item__text";
+    textSpan.textContent = todo.text; // Safely set text content without innerHTML injection
+
+    var deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn btn--danger btn--sm todo-item__delete";
+    deleteBtn.textContent = "Delete";
+    deleteBtn.dataset.action = "delete";
+    deleteBtn.dataset.id = todo.id;
+    deleteBtn.setAttribute("aria-label", 'Delete task "' + todo.text + '"');
+
+    li.appendChild(checkbox);
+    li.appendChild(textSpan);
+    li.appendChild(deleteBtn);
+
+    els.list.appendChild(li);
+  });
+}
 // TODO [T3-09]: Update the counters and toggle the empty state.
 // All counters must be derived from the array, never incremented.
 function renderStats() {}
