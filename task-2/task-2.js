@@ -28,38 +28,205 @@ let students = [];
 // TODO [T2-01]: Derive a letter grade from a numeric score.
 // A: 80-100, B: 70-79, C: 60-69, D: 50-59, F: below 50.
 function getGrade(score) {
-  return "";
+  if (score >= 80) {
+  return "A";
+} else if (score >= 70) {
+  return "B";
+} else if (score >= 60) {
+  return "C";
+} else if (score >= 50) {
+  return "D";
+} else {
+  return "F";
+}
 }
 
 // TODO [T2-02]: Validate the submitted name and score.
 // Reject an empty name, a non-numeric score, a score below 0 and a
 // score above 100.
 function validateStudent(name, score) {
-  return { valid: false, errors: {} };
+  const errors = {};
+
+if (!name || name.trim() === "") {
+  errors.name = "Student name is required.";
+}
+
+if (score === "" || score === null || score === undefined) {
+  errors.score = "Score is required.";
+} else {
+  const num = Number(score);
+
+  if (Number.isNaN(num)) {
+    errors.score = "Score must be a number.";
+  } else if (num < 0 || num > 100) {
+    errors.score = "Score must be between 0 and 100.";
+  }
+}
+
+return {
+  valid: Object.keys(errors).length === 0,
+  errors
+};
 }
 
 // TODO [T2-03]: Add a validated student to state and re-render.
-function addStudent(name, score) {}
+function addStudent(name, score) {
+  const student = {
+  id: crypto.randomUUID(),
+  name: name.trim(),
+  score: Number(score),
+  grade: getGrade(Number(score))
+};
+
+students.push(student);
+
+renderStudents();
+renderStats();
+}
 
 // TODO [T2-04]: Remove one student by id and re-render.
-function removeStudent(id) {}
+function removeStudent(id) {
+  students = students.filter(function(student) {
+  return student.id !== id;
+});
+
+renderStudents();
+renderStats();
+}
 
 // TODO [T2-05]: Calculate class statistics from the students array.
 // Return average (one decimal), highest, lowest and count. With zero
 // students every stat must be a dash, never NaN.
 function calculateStats() {
-  return { average: "-", highest: "-", lowest: "-", count: 0 };
+  const count = students.length;
+
+if (count === 0) {
+  return {
+    average: "-",
+    highest: "-",
+    lowest: "-",
+    count: 0
+  };
+}
+
+let total = 0;
+let highest = students[0].score;
+let lowest = students[0].score;
+
+for (let i = 0; i < students.length; i++) {
+  const score = students[i].score;
+
+  total = total + score;
+
+  if (score > highest) {
+    highest = score;
+  }
+
+  if (score < lowest) {
+    lowest = score;
+  }
+}
+
+const average = (total / count).toFixed(1);
+
+return {
+  average: average,
+  highest: highest,
+  lowest: lowest,
+  count: count
+};
 }
 
 // TODO [T2-06]: Build the student list from state. Clear it first.
-function renderStudents() {}
+function renderStudents() {
+  els.list.innerHTML = "";
+
+for (let i = 0; i < students.length; i++) {
+  const student = students[i];
+
+  const li = document.createElement("li");
+  li.className = "list-item";
+
+  const nameSpan = document.createElement("span");
+  nameSpan.textContent = student.name;
+
+  const scoreSpan = document.createElement("span");
+  scoreSpan.textContent = student.score;
+
+  const gradeSpan = document.createElement("span");
+  gradeSpan.textContent = student.grade;
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.type = "button";
+  deleteBtn.dataset.id = student.id;
+
+  li.appendChild(nameSpan);
+  li.appendChild(scoreSpan);
+  li.appendChild(gradeSpan);
+  li.appendChild(deleteBtn);
+
+  els.list.appendChild(li);
+}
+}
 
 // TODO [T2-07]: Update the statistics display and toggle the empty state.
-function renderStats() {}
+function renderStats() {
+  const stats = calculateStats();
+
+els.average.textContent = stats.average;
+els.highest.textContent = stats.highest;
+els.lowest.textContent = stats.lowest;
+els.count.textContent = stats.count;
+
+if (stats.count === 0) {
+  els.empty.hidden = false;
+  els.list.hidden = true;
+} else {
+  els.empty.hidden = true;
+  els.list.hidden = false;
+}
+}
 
 function init() {
   // TODO [T2-08]: Bind the form submit and the delete delegation, then
   // perform the first render.
+
+  els.form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  document.getElementById("student-name-error").textContent = "";
+  document.getElementById("student-score-error").textContent = "";
+
+  const name = els.name.value;
+  const score = els.score.value;
+
+  const result = validateStudent(name, score);
+
+  if (!result.valid) {
+    if (result.errors.name) {
+      document.getElementById("student-name-error").textContent = result.errors.name;
+    }
+    if (result.errors.score) {
+      document.getElementById("student-score-error").textContent = result.errors.score;
+    }
+    return;
+  }
+
+  addStudent(name, score);
+  els.form.reset();
+  els.name.focus();
+});
+
+els.list.addEventListener("click", function(e) {
+  if (e.target.tagName === "BUTTON") {
+    const id = e.target.dataset.id;
+    removeStudent(id);
+  }
+});
+
+renderStudents();
+renderStats();
 }
 
 document.addEventListener("DOMContentLoaded", init);

@@ -28,30 +28,147 @@ let expenses = [];
 // amount that is zero or negative. Return a result object the caller can
 // use to populate the field-error elements.
 function validateExpense(name, amount) {
-  return { valid: false, errors: {} };
+  const errors = {};
+
+  if (!name.trim()) {
+    errors.name = "Expense name is required.";
+  }
+
+  if (!amount.trim()) {
+    errors.amount = "Amount is required.";
+  } else if (Number.isNaN(Number(amount))) {
+    errors.amount = "Amount must be a number.";
+  } else if (Number(amount) <= 0) {
+    errors.amount = "Amount must be greater than zero.";
+  }
+
+  return {
+    valid: Object.keys(errors).length === 0,
+    errors,
+  };
+  
 }
 
 // TODO [T1-02]: Add a validated expense to state and re-render.
-function addExpense(name, amount) {}
+function addExpense(name, amount) {
+  const expense = {
+  id: crypto.randomUUID(),
+  name: name.trim(),
+  amount: Number(amount)
+  };
+  expenses.push(expense);
+
+  renderExpenses();
+  renderSummary();
+}
 
 // TODO [T1-03]: Remove one expense by id and re-render.
-function removeExpense(id) {}
+function removeExpense(id) {
+  expenses = expenses.filter(function(expense) {
+  return expense.id !== id;
+ });
+
+  renderExpenses();
+  renderSummary();
+}
 
 // TODO [T1-04]: Sum the amounts. Must be derived, never stored.
 function calculateTotal() {
-  return 0;
+  let total = 0;
+
+  for (let i = 0; i < expenses.length; i++) {
+   total = total + expenses[i].amount;
+}
+
+return total;
 }
 
 // TODO [T1-05]: Build the list from state. Clear it first. No innerHTML
 // concatenation of unescaped user input.
-function renderExpenses() {}
+function renderExpenses() {
+  els.list.innerHTML = "";
+
+  for (let i = 0; i < expenses.length; i++) {
+   const expense = expenses[i];
+
+   const li = document.createElement("li");
+   li.className = "list-item";
+
+   const nameSpan = document.createElement("span");
+   nameSpan.textContent = expense.name;
+
+   const amountSpan = document.createElement("span");
+   amountSpan.textContent = expense.amount.toFixed(2);
+
+   const deleteBtn = document.createElement("button");
+   deleteBtn.textContent = "Delete";
+   deleteBtn.type = "button";
+   deleteBtn.dataset.id = expense.id;
+
+   li.appendChild(nameSpan);
+   li.appendChild(amountSpan);
+   li.appendChild(deleteBtn);
+
+   els.list.appendChild(li);
+ }
+}
 
 // TODO [T1-06]: Toggle the empty state and refresh the total and count.
-function renderSummary() {}
+function renderSummary() {
+  const total = calculateTotal();
+  const count = expenses.length;
+
+  els.total.textContent = count === 0 ? "-" : total.toFixed(2);
+  els.count.textContent = count;
+
+  if (count === 0) {
+    els.empty.hidden = false;
+    els.list.hidden = true;
+  } else {
+    els.empty.hidden = true;
+    els.list.hidden = false;
+  }
+}
 
 function init() {
   // TODO [T1-07]: Bind the form submit and the delete delegation, then
   // perform the first render.
-}
+
+  els.form.addEventListener("submit", function(e) {
+   e.preventDefault();
+
+   document.getElementById("expense-name-error").textContent = "";
+   document.getElementById("expense-amount-error").textContent = "";
+
+   const name = els.name.value;
+   const amount = els.amount.value;
+
+   const result = validateExpense(name, amount);
+
+   if (!result.valid) {
+     if (result.errors.name) {
+       document.getElementById("expense-name-error").textContent = result.errors.name;
+     }
+     if (result.errors.amount) {
+       document.getElementById("expense-amount-error").textContent = result.errors.amount;
+     }
+     return;
+   }
+
+   addExpense(name, amount);
+     els.form.reset();
+     els.name.focus();
+   });
+
+  els.list.addEventListener("click", function(e) {
+     if (e.target.tagName === "BUTTON") {
+      const id = e.target.dataset.id;
+      removeExpense(id);
+   }
+  });
+
+  renderExpenses();
+  renderSummary();
+ }
 
 document.addEventListener("DOMContentLoaded", init);
