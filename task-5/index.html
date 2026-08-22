@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Task 5 - Interactive Sales Dashboard</title>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body data-task="5">
 
   <header class="site-header">
@@ -64,13 +66,8 @@
       <h2 id="table-heading" class="section__heading">Sales records</h2>
 
       <div class="toolbar">
-        <input
-          type="search"
-          id="sales-search"
-          class="field"
-          placeholder="Search by product..."
-          aria-label="Search sales by product name"
-        >
+        <input type="search" id="sales-search" class="field" placeholder="Search by product..."
+          aria-label="Search sales by product name">
         <select id="sales-category" class="field" aria-label="Filter by category">
           <option value="">All categories</option>
         </select>
@@ -104,10 +101,10 @@
       <div id="sales-empty" class="empty-state">
         <div class="empty-state__icon" aria-hidden="true">
           <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="4" y="8" width="40" height="32" rx="4"/>
-            <line x1="4" y1="18" x2="44" y2="18"/>
-            <line x1="16" y1="18" x2="16" y2="40"/>
-            <line x1="30" y1="18" x2="30" y2="40"/>
+            <rect x="4" y="8" width="40" height="32" rx="4" />
+            <line x1="4" y1="18" x2="44" y2="18" />
+            <line x1="16" y1="18" x2="16" y2="40" />
+            <line x1="30" y1="18" x2="30" y2="40" />
           </svg>
         </div>
         <p class="empty-state__headline">No sales records found</p>
@@ -127,4 +124,5 @@
   <script src="task-5.js" defer></script>
 
 </body>
+
 </html>
