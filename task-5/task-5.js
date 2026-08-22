@@ -74,37 +74,110 @@ function calcRevenue(records) {
 
 // TODO [T5-06]: Calculate total units sold from a set of records.
 function calcUnits(records) {
-  return 0;
+  return records.reduce((sum, r) => sum + r.quantity, 0);
 }
 
 // TODO [T5-07]: Find the best-selling product by total units across
 // the provided records. Return the product name, or a dash if the
 // set is empty.
 function findTopProduct(records) {
-  return "-";
+  if (records.length === 0) return "-";
+  var map = {};
+  records.forEach((r) => {
+    map[r.product] = (map[r.product] || 0) + r.quantity;
+  });
+  return Object.entries(map).sort((a, b) => b[1] - a[1])[0][0];
 }
 
 // TODO [T5-08]: Find the best-selling category by total revenue
 // across the provided records. Return the category name, or a dash
 // if the set is empty.
 function findTopCategory(records) {
-  return "-";
+  if (records.length === 0) return "-";
+  var map = {};
+  records.forEach((r) => {
+    map[r.category] = (map[r.category] || 0) + r.quantity * r.price;
+  });
+  return Object.entries(map).sort((a, b) => b[1] - a[1])[0][0];
 }
 
 // TODO [T5-09]: Update all six KPI elements from the visible set.
 // KPIs must recalculate against the filtered set, not the full
 // dataset. Safe values when nothing matches: no NaN, no Infinity.
-function renderKPIs(records) {}
+function renderKPIs(records) {
+  if (records.length === 0) {
+    els.kpiRevenue.textContent = "-";
+    els.kpiOrders.textContent = "0";
+    els.kpiUnits.textContent = "0";
+    els.kpiAov.textContent = "-";
+    els.kpiTopProduct.textContent = "-";
+    els.kpiTopCategory.textContent = "-";
+    return;
+  }
+  var revenue = calcRevenue(records);
+  var units = calcUnits(records);
+  var orders = records.length;
+  var aov = revenue / orders;
+
+  els.kpiRevenue.textContent = revenue.toLocaleString() + " XAF";
+  els.kpiOrders.textContent = orders;
+  els.kpiUnits.textContent = units;
+  els.kpiAov.textContent = Math.round(aov).toLocaleString() + " XAF";
+  els.kpiTopProduct.textContent = findTopProduct(records);
+  els.kpiTopCategory.textContent = findTopCategory(records);
+}
 
 // TODO [T5-10]: Build the table rows from the visible set. Clear
 // the table body first. No innerHTML concatenation of unescaped
 // user input.
-function renderTable(records) {}
+function renderTable(records) {
+  els.tableBody.innerHTML = "";
+  records.forEach((r) => {
+    var tr = document.createElement("tr");
+    var rev = r.quantity * r.price;
+    // use textContent only
+    [
+      r.date,
+      r.product,
+      r.category,
+      r.quantity,
+      r.price.toLocaleString() + " XAF",
+      rev.toLocaleString() + " XAF",
+      r.region,
+    ].forEach((val) => {
+      var td = document.createElement("td");
+      td.textContent = val;
+      tr.appendChild(td);
+    });
+    els.tableBody.appendChild(tr);
+  });
+  els.empty.style.display = records.length === 0 ? "block" : "none";
+}
 
+function render() {
+  var visible = getVisible();
+  renderKPIs(visible);
+  renderTable(visible);
+}
+
+// TODO [T5-11]: Populate the category dropdown from the dataset,
+// bind search, filter and sort controls, then perform the first
+// render.
 function init() {
-  // TODO [T5-11]: Populate the category dropdown from the dataset,
-  // bind search, filter and sort controls, then perform the first
-  // render.
+  // populate category dropdown from dataset
+  var cats = [...new Set(SALES.map((s) => s.category))].sort();
+  cats.forEach((c) => {
+    var opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    els.category.appendChild(opt);
+  });
+
+  els.search.addEventListener("input", render);
+  els.category.addEventListener("change", render);
+  els.sort.addEventListener("change", render);
+
+  render(); // 30 records on load
 }
 
 document.addEventListener("DOMContentLoaded", init);
