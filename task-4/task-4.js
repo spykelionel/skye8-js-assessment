@@ -34,43 +34,88 @@ function applySearch(products, term) {
 // TODO [T4-02]: Filter the dataset by category and by price band.
 // Return a new array. An empty category or price value means "all".
 function applyFilters(products, category, priceBand) {
-  return products;
+  var filtered = products;
+  if (category) filtered = filtered.filter((p) => p.category === category);
+  if (priceBand) {
+    var [min, max] = priceBand.split("-");
+    filtered = filtered.filter((p) => {
+      if (max === "") return p.price >= Number(min); // Over 500k
+      if (min === "0") return p.price < 50000;
+      return p.price >= Number(min) && p.price <= Number(max);
+    });
+  }
+  return filtered;
 }
 
 // TODO [T4-03]: Sort a copy of the array by price ascending or
 // descending. An empty sort value returns the array unchanged.
 // Never mutate the input array.
 function applySort(products, sortValue) {
-  return products;
+  var copy = [...products];
+  if (sortValue === "price-asc") return copy.sort((a, b) => a.price - b.price);
+  if (sortValue === "price-desc") return copy.sort((a, b) => b.price - a.price);
+  return copy;
 }
 
 // TODO [T4-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the
 // filtered, sorted array.
 function getVisible() {
-  return [];
+  var searched = applySearch(PRODUCTS, els.search.value);
+  var filtered = applyFilters(searched, els.category.value, els.price.value);
+  return applySort(filtered, els.sort.value);
 }
 
 // TODO [T4-05]: Render a single product card. Return a DOM element.
 // No innerHTML concatenation of unescaped user input.
 function createProductCard(product) {
   var card = document.createElement("article");
+  card.className = "card product-card";
+  var name = document.createElement("h3");
+  name.textContent = product.name;
+  var cat = document.createElement("p");
+  cat.textContent = product.category;
+  var price = document.createElement("p");
+  price.className = "product-price";
+  price.textContent = product.price.toLocaleString() + " XAF";
+  var stock = document.createElement("span");
+  stock.textContent = product.inStock ? "In stock" : "Out of stock";
+  card.append(name, cat, price, stock);
   return card;
 }
 
 // TODO [T4-06]: Render the product grid from the visible set.
 // Clear it first.
-function renderProducts(products) {}
+function renderProducts(products) {
+  els.grid.innerHTML = "";
+  products.forEach((p) => els.grid.appendChild(createProductCard(p)));
+}
 
 // TODO [T4-07]: Update the visible count display.
-function renderCount(count) {}
+function renderCount(count) {
+  els.count.textContent = count;
+}
 
 // TODO [T4-08]: Toggle the empty state based on visible products.
-function renderEmptyState(count) {}
+function renderEmptyState(count) {
+  els.empty.style.display = count === 0 ? "block" : "none";
+  els.grid.style.display = count === 0 ? "none" : "grid";
+}
+function render() {
+  var visible = getVisible();
+  renderProducts(visible);
+  renderCount(visible.length);
+  renderEmptyState(visible.length);
+}
 
+// TODO [T4-09]: Bind search, filter and sort controls, then
+// perform the first render.
 function init() {
-  // TODO [T4-09]: Bind search, filter and sort controls, then
-  // perform the first render.
+  els.search.addEventListener("input", render);
+  els.category.addEventListener("change", render);
+  els.price.addEventListener("change", render);
+  els.sort.addEventListener("change", render);
+  render(); //Show all 18 on load
 }
 
 document.addEventListener("DOMContentLoaded", init);
