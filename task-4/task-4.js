@@ -26,49 +26,162 @@ var els = {
 // TODO [T4-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(products, term) {
-  return products;
+  var searchTerm = term.trim().toLowerCase();
+
+  if (searchTerm === "") {
+    return products.slice();
+  }
+
+  return products.filter(function (product) {
+    return product.name.toLowerCase().includes(searchTerm);
+  });
 }
 
 // TODO [T4-02]: Filter the dataset by category and by price band.
 // Return a new array. An empty category or price value means "all".
 function applyFilters(products, category, priceBand) {
-  return products;
+  return products.filter(function (product) {
+    var categoryMatches =
+      category === "" || product.category === category;
+
+    var priceMatches = true;
+
+    if (priceBand === "0-50000") {
+      priceMatches = product.price < 50000;
+    }
+
+    if (priceBand === "50000-150000") {
+      priceMatches = product.price >= 50000 && product.price <= 150000;
+    }
+
+    if (priceBand === "150000-500000") {
+      priceMatches = product.price >= 150000 && product.price <= 500000;
+    }
+
+    if (priceBand === "500000-") {
+      priceMatches = product.price > 500000;
+    }
+
+    return categoryMatches && priceMatches;
+  });
 }
 
 // TODO [T4-03]: Sort a copy of the array by price ascending or
 // descending. An empty sort value returns the array unchanged.
 // Never mutate the input array.
 function applySort(products, sortValue) {
-  return products;
+  if (sortValue === "") {
+    return products.slice();
+  }
+
+  var sortedProducts = products.slice();
+
+  if (sortValue === "price-asc") {
+    sortedProducts.sort(function (a, b) {
+      return a.price - b.price;
+    });
+  }
+
+  if (sortValue === "price-desc") {
+    sortedProducts.sort(function (a, b) {
+      return b.price - a.price;
+    });
+  }
+
+  return sortedProducts;
 }
 
 // TODO [T4-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the
 // filtered, sorted array.
 function getVisible() {
-  return [];
+  var searched = applySearch(
+    PRODUCTS,
+    els.search.value
+  );
+
+  var filtered = applyFilters(
+    searched,
+    els.category.value,
+    els.price.value
+  );
+
+  return applySort(
+    filtered,
+    els.sort.value
+  );
 }
 
 // TODO [T4-05]: Render a single product card. Return a DOM element.
 // No innerHTML concatenation of unescaped user input.
 function createProductCard(product) {
   var card = document.createElement("article");
+  card.className = "card";
+
+  var name = document.createElement("h3");
+  name.textContent = product.name;
+
+  var category = document.createElement("p");
+  category.textContent = "Category: " + product.category;
+
+  var price = document.createElement("p");
+  price.textContent = product.price.toLocaleString() + " XAF";
+
+  var rating = document.createElement("p");
+  rating.textContent = "Rating: " + product.rating;
+
+  var stock = document.createElement("p");
+  stock.textContent = product.inStock
+    ? "In Stock"
+    : "Out of Stock";
+
+  card.appendChild(name);
+  card.appendChild(category);
+  card.appendChild(price);
+  card.appendChild(rating);
+  card.appendChild(stock);
+
   return card;
 }
 
 // TODO [T4-06]: Render the product grid from the visible set.
 // Clear it first.
-function renderProducts(products) {}
+function renderProducts(products) {
+  els.grid.replaceChildren();
+
+  products.forEach(function (product) {
+    var card = createProductCard(product);
+    els.grid.appendChild(card);
+  });
+}
 
 // TODO [T4-07]: Update the visible count display.
-function renderCount(count) {}
+function renderCount(count) {
+  els.count.textContent = count;
+}
 
 // TODO [T4-08]: Toggle the empty state based on visible products.
-function renderEmptyState(count) {}
+function renderEmptyState(count) {
+  els.empty.hidden = count !== 0;
+}
 
+// TODO [T4-09]: Bind search, filter and sort controls, then
+// perform the first render.
 function init() {
-  // TODO [T4-09]: Bind search, filter and sort controls, then
-  // perform the first render.
+  function updateProducts() {
+    var visibleProducts = getVisible();
+
+    renderProducts(visibleProducts);
+    renderCount(visibleProducts.length);
+    renderEmptyState(visibleProducts.length);
+  }
+
+  els.search.addEventListener("input", updateProducts);
+  els.category.addEventListener("change", updateProducts);
+  els.price.addEventListener("change", updateProducts);
+  els.sort.addEventListener("change", updateProducts);
+
+  updateProducts();
 }
 
 document.addEventListener("DOMContentLoaded", init);
