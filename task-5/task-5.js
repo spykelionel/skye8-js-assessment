@@ -252,10 +252,7 @@ function renderTable(records) {
 }
 
 function init() {
-  // TODO [T5-11]: Populate the category dropdown from the dataset,
-  // bind search, filter and sort controls, then perform the first
-  // render.
-  function init() {
+  // Populate category dropdown
   var categories = [];
 
   SALES.forEach(function (record) {
@@ -275,6 +272,7 @@ function init() {
     els.category.appendChild(option);
   });
 
+  // Update the dashboard
   function updateDashboard() {
     var visibleRecords = getVisible();
 
@@ -284,14 +282,15 @@ function init() {
     els.empty.hidden = visibleRecords.length !== 0;
   }
 
+  // Bind controls
   els.search.addEventListener("input", updateDashboard);
 
   els.category.addEventListener("change", updateDashboard);
 
   els.sort.addEventListener("change", updateDashboard);
 
+  // First render
   updateDashboard();
-}
 }
 
 document.addEventListener("DOMContentLoaded", init);
