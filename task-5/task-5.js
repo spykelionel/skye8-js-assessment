@@ -30,27 +30,40 @@ var els = {
 // TODO [T5-01]: Filter the dataset by search term. Case insensitive,
 // partial match on the product name. Return a new array.
 function applySearch(records, term) {
-  return records;
+  if (!term.trim()) return records;
+  var lower = term.toLowerCase();
+  return records.filter((r) => r.product.toLowerCase().includes(lower));
 }
 
 // TODO [T5-02]: Filter the dataset by category. An empty value means
 // "all". Return a new array.
 function applyFilters(records, category) {
-  return records;
+  if (!category) return records;
+  return records.filter((r) => r.category === category);
 }
 
 // TODO [T5-03]: Sort a copy of the array by the selected criterion.
 // An empty sort value returns the array unchanged. Never mutate the
 // input array.
 function applySort(records, sortValue) {
-  return records;
+  var copy = [...records];
+  if (sortValue === "revenue-desc")
+    return copy.sort((a, b) => b.quantity * b.price - a.quantity * a.price);
+  if (sortValue === "revenue-asc")
+    return copy.sort((a, b) => a.quantity * a.price - b.quantity * b.price);
+  if (sortValue === "date-desc") return copy.sort((a, b) => new Date(b.date) - new Date(a.date));
+  if (sortValue === "date-asc") return copy.sort((a, b) => new Date(a.date) - new Date(b.date));
+  if (sortValue === "quantity-desc") return copy.sort((a, b) => b.quantity - a.quantity);
+  return copy;
 }
 
 // TODO [T5-04]: Compose search, filter and sort into a single
 // pipeline. Read the current control values and return the filtered,
 // sorted array.
 function getVisible() {
-  return [];
+  var searched = applySearch(SALES, els.search.value);
+  var filtered = applyFilters(searched, els.category.value);
+  return applySort(filtered, els.sort.value);
 }
 
 // TODO [T5-05]: Calculate total revenue from a set of records.
